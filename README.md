@@ -1,4 +1,4 @@
-## Universal Web Interface For different models of Switches (UWIFS)  
+## Universal Web Interface For different models of Switches (UWIFS) 
 
 UWIFS designed to control the switches from different manufacturers and modle through a common web interface.
 
