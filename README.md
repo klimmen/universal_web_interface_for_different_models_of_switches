@@ -1,4 +1,4 @@
-== Universal Web Interface For different models of Switches (UWIFS)
+## Universal Web Interface For different models of Switches (UWIFS)
 
 
 UWIFS designed to control the switches from different manufacturers and modle through a common web interface.
@@ -24,18 +24,13 @@ UWIFS designed to control the switches from different manufacturers and modle th
 ### UWIFS capabilities
 
  1 Derivation of general information about the device
-  1.1 Derivation information (device model, frameware version, uptime device, device MAC address, 
-      device IP address)
-  1.2 Ports informations (status up/down, ports uptime, ports descriptions, speed 10/100/1000Mbit/s, 
-      bandwidth limits on ports, macaddress limits on ports)
+  1.1 Derivation information (device model, frameware version, uptime device, device MAC address, device IP address)
+  1.2 Ports informations (status up/down, ports uptime, ports descriptions, speed 10/100/1000Mbit/s, bandwidth limits on ports, macaddress limits on ports)
   1.3 Vlans informations (vlans names, vlaevice Configurationns ID, vlans configuration for ports)
-  1.4 Others etc.
-
+  1.4 Others etc. 
  2 Device configuration
-  2.1 Ports configuration (up/down, set port description, set port speed, set bandwidth on port, 
-      set maclimit on port)
-  2.2 Vlans configuration (create/delete vlan, edit vlan configuration: add on ports, tag/untag, 
-      set pvid for ports)
+  2.1 Ports configuration (up/down, set port description, set port speed, set bandwidth on port, set maclimit on port)
+  2.2 Vlans configuration (create/delete vlan, edit vlan configuration: add on ports, tag/untag, set pvid for ports)
   2.3 Other (configure IP setings,configure access control setings:login, password, SNMP community table)
 
    
