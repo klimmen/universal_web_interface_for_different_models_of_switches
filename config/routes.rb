@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
  
+  resources :switches, param: :ip, constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ }
+  
+
   root 'welcome#index'
 
 
