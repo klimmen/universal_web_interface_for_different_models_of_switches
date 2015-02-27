@@ -4,27 +4,27 @@
 
 <table class="table table-bordered table-striped">
   <thead>
-    <tr>
+    <tr >
       <th>Name</th>
       <th>Ip</th>
-      <th>Login</th>
-      <th>Pass</th>
-      <th>Snmp</th>
-      <th colspan="3"></th>
+      <th>information switsh</th>
+      <th>Ports</th>
+      <th>Vlans</th>
+      <th>tools</th>
     </tr>
   </thead>
 
   <tbody>
     <% @switches.each do |switch| %>
-      <tr>
-        <td><%= switch.name %></td>
-        <td><%= switch.ip %></td>
-        <td><%= switch.login %></td>
-        <td><%= switch.pass %></td>
-        <td><%= switch.snmp %></td>
-        <td><%= link_to 'Show', switch, class: "btn-sm btn-info" %></td>
-        <td><%= link_to 'Edit', edit_switch_path(switch), class: "btn-sm btn-info" %></td>
-        <td><%= link_to 'Destroy', switch, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-sm btn-danger" %></td>
+      <tr >
+        <td class="col-md-2"><%= switch.name %></td>
+        <td class="col-md-2"><%= switch.ip %></td>
+        <td class="col-md-2"><%= link_to 'information switsh', "/#{switch.ip}", class: "btn-sm btn-info " %></td>
+        <td class="col-md-2"><%= link_to 'Ports', "/#{switch.ip}/ports", class: "btn-sm btn-info " %></td>
+        <td class="col-md-2"><%= link_to 'Vlans', "/#{switch.ip}/vlans", class: "btn-sm btn-info " %></td>
+        <td class="col-md-2"><%= link_to '', switch, class: "btn-sm btn-info glyphicon glyphicon-eye-open" %>
+        <%= link_to '', edit_switch_path(switch), class: "btn-sm btn-info glyphicon glyphicon-pencil" %>
+        <%= link_to '', switch, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-sm btn-danger glyphicon glyphicon-remove" %></td>
       </tr>
     <% end %>
   </tbody>

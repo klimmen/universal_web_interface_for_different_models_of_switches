@@ -62,12 +62,15 @@ class SwitchesController < ApplicationController
   end
 
   def information_about_switch
+
   end
 
   def ports
+
   end
 
   def vlans
+
   end
 
   private

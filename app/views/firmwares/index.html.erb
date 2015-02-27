@@ -2,7 +2,7 @@
 
 <h1>Listing Firmwares</h1>
 
-<table>
+<table class="table table-bordered table-striped">
   <thead>
     <tr>
       <th>Name</th>
@@ -15,10 +15,10 @@
     <% @firmwares.each do |firmware| %>
       <tr>
         <td><%= firmware.name %></td>
-        <td><%= firmware.switch_model_id %></td>
-        <td><%= link_to 'Show', firmware %></td>
-        <td><%= link_to 'Edit', edit_firmware_path(firmware) %></td>
-        <td><%= link_to 'Destroy', firmware, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= firmware.switch_model.name %></td>
+        <td><%= link_to 'Show', firmware, class: "btn-sm btn-info"  %></td>
+        <td><%= link_to 'Edit', edit_firmware_path(firmware), class: "btn-sm btn-info"  %></td>
+        <td><%= link_to 'Destroy', firmware, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-sm btn-danger" %></td> 
       </tr>
     <% end %>
   </tbody>

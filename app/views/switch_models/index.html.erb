@@ -2,7 +2,7 @@
 
 <h1>Listing Switch Models</h1>
 
-<table>
+<table class="table table-bordered table-striped">
   <thead>
     <tr>
       <th>Name</th>
@@ -14,9 +14,9 @@
     <% @switch_models.each do |switch_model| %>
       <tr>
         <td><%= switch_model.name %></td>
-        <td><%= link_to 'Show', switch_model %></td>
-        <td><%= link_to 'Edit', edit_switch_model_path(switch_model) %></td>
-        <td><%= link_to 'Destroy', switch_model, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Show', switch_model, class: "btn-sm btn-info"  %></td>
+        <td><%= link_to 'Edit', edit_switch_model_path(switch_model), class: "btn-sm btn-info"  %></td>
+        <td><%= link_to 'Destroy', switch_model, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-sm btn-danger" %></td>
       </tr>
     <% end %>
   </tbody>
@@ -24,4 +24,4 @@
 
 <br>
 
-<%= link_to 'New Switch model', new_switch_model_path %>
+<%= link_to 'New Switch model', new_switch_model_path, class: "btn btn-info" %>
