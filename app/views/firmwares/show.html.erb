@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @firmware.name %>
+</p>
+
+<p>
+  <strong>Switch model:</strong>
+  <%= @firmware.switch_model_id %>
+</p>
+
+<%= link_to 'Edit', edit_firmware_path(@firmware) %> |
+<%= link_to 'Back', firmwares_path %>

@@ -6,8 +6,8 @@ class Switch < ActiveRecord::Base
   validates :login, :presence => true
   validates :pass, :presence => true
   validates :snmp, :presence => true
-  def to_param
-    ip
-  end
+ # def to_param
+ #   ip
+ # end
 
 end

@@ -4,8 +4,8 @@ class CreateSwitches < ActiveRecord::Migration
       t.string :name, :null => false
       t.string :ip, :null => false
       t.string :login, :null => false, default: "admin"
-      t.string :pass, :null => false, default: "1234" 
-      t.string :snmp, :null => false, default: "public"
+      t.string :pass, :null => false
+      t.string :snmp, :null => false
 
       t.timestamps null: false
     end
