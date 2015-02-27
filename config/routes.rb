@@ -7,9 +7,11 @@ Rails.application.routes.draw do
   resources :switch_models
 
   resources :switches
-  # , param: :ip, constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ }
   
-
+  get ':ip' => 'switches#information_about_switch', as: "ip", constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ }
+  get ':ip/ports' => 'switches#ports', as: "ip_ports", constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ }
+  get ':ip/vlans' => 'switches#vlans', as: "ip_vlans", constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ }
+  
   root 'welcome#index'
 
 

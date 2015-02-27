@@ -1,6 +1,6 @@
 class SwitchesController < ApplicationController
   before_action :set_switch, only: [:show, :edit, :update, :destroy]
-
+  before_action :set_ip_switch, only: [:information_about_switch, :ports, :vlans]
   # GET /switches
   # GET /switches.json
   def index
@@ -61,11 +61,23 @@ class SwitchesController < ApplicationController
     end
   end
 
+  def information_about_switch
+  end
+
+  def ports
+  end
+
+  def vlans
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_switch
-       # @switch = Switch.find_by_ip(params[:ip])
        @switch = Switch.find(params[:id])
+    end
+
+    def set_ip_switch
+      @switch = Switch.find_by_ip(params[:ip])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
