@@ -1,11 +1,14 @@
 Rails.application.routes.draw do
  
   devise_for :users
-  resources :firmwares
 
   resources :mibs
 
-  resources :switch_models
+  resources :switch_models do
+    resources :firmwares do 
+      resources :mibs
+    end
+  end
 
   resources :switches
   # , param: :ip, constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ }
