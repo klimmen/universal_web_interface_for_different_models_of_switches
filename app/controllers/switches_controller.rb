@@ -1,4 +1,6 @@
 class SwitchesController < ApplicationController
+
+  load_and_authorize_resource
   before_action :set_switch, only: [:show, :edit, :update, :destroy]
   before_action :set_ip_switch, only: [:information_about_switch, :ports, :vlans]
   # GET /switches
