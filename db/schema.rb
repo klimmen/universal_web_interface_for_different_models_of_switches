@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150304082128) do
+ActiveRecord::Schema.define(version: 20150305073211) do
 
   create_table "firmware_mibs", force: :cascade do |t|
     t.integer  "firmware_id", null: false

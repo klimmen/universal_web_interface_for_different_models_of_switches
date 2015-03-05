@@ -1,15 +1,16 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Listing Mibs</h1>
-
-<table class="table table-bordered table-striped">
+<% if !@mibs.blank? then %>
+<h3>Model - <%=@mibs.first.firmwares.first.switch_model.name %></h3>
+<h3>Firmware - <%=@mibs.first.firmwares.first.name %></h3>
+<% end %>
+<table class="table">
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Value</th>
-      <th>Firewal</th>
-      <th>Model</th>
-      <th colspan="3"></th>
+      <th class="col-md-2">Name</th>
+      <th class="col-md-2">Action</th>
+      <th colspan="2"></th>
     </tr>
   </thead>
 
@@ -18,15 +19,8 @@
       <tr>
         <td><%= mib.name %></td>
         <td><%= mib.value_oid.name %></td>
-        <% mib.firmwares.each do |firmware| %>
-          <td><%= firmware.name %></td>
-        <% end %>
-        <% mib.firmwares.each do |firmware| %>
-          <td><%= firmware.switch_model.name %></td>
-        <% end %>
-        <td><%= link_to 'Show', mib, class: "btn-sm btn-info"  %></td>
-        <td><%= link_to 'Edit', edit_mib_path(mib), class: "btn-sm btn-info"  %></td>
-        <td><%= link_to 'Destroy', mib, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-sm btn-danger" %></td>
+        <td><%= link_to 'edit', edit_switch_model_firmware_mib_path(params[:switch_model_id], params[:firmware_id],mib), class: "btn-sm btn-info glyphicon glyphicon-eye-open"  %>
+        <%= link_to '', switch_model_firmware_mib_path(params[:switch_model_id], params[:firmware_id],mib), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-sm btn-danger glyphicon glyphicon-remove" %></td>
       </tr>
     <% end %>
   </tbody>
@@ -34,4 +28,4 @@
 
 <br>
 
-<%= link_to 'New Mib', new_mib_path, class: "btn btn-info" %>
+<%= link_to 'New Mib', new_switch_model_firmware_mib_path(params[:switch_model_id], params[:firmware_id] ), class: "btn btn-info" %>

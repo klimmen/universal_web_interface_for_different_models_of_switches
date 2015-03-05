@@ -1,0 +1,2 @@
+module ValueOidsHelper
+end

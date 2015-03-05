@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Value Oids</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @value_oids.each do |value_oid| %>
+      <tr>
+        <td><%= value_oid.name %></td>
+        <td><%= link_to 'Show', value_oid %></td>
+        <td><%= link_to 'Edit', edit_value_oid_path(value_oid) %></td>
+        <td><%= link_to 'Destroy', value_oid, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Value oid', new_value_oid_path %>

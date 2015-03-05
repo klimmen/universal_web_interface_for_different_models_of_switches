@@ -1,12 +1,12 @@
 Rails.application.routes.draw do
  
+  resources :value_oids
+
   devise_for :users
 
-  resources :mibs
-
-  resources :switch_models do
-    resources :firmwares do 
-      resources :mibs
+  resources :switch_models, only: [:index, :new, :edit, :create, :update, :destroy] do
+    resources :firmwares, only: [:new, :edit, :create, :update, :destroy] do 
+      resources :mibs, only: [:index, :new, :edit, :create, :update, :destroy]
     end
   end
 

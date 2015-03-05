@@ -4,7 +4,6 @@ class FirmwaresController < ApplicationController
 
   # GET /firmwares/new
   def new
-    @switch_model = SwitchModel.find(params[:switch_model_id])
     @firmware = Firmware.new
   end
 
