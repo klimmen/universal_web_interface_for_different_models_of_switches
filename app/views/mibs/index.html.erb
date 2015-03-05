@@ -19,7 +19,7 @@
       <tr>
         <td><%= mib.name %></td>
         <td><%= mib.value_oid.name %></td>
-        <td><%= link_to 'edit', edit_switch_model_firmware_mib_path(params[:switch_model_id], params[:firmware_id],mib), class: "btn-sm btn-info glyphicon glyphicon-eye-open"  %>
+        <td><%= link_to 'edit', edit_switch_model_firmware_mib_path(params[:switch_model_id], params[:firmware_id],mib), class: "btn-sm btn-info glyphicon glyphicon-penciln"  %>
         <%= link_to '', switch_model_firmware_mib_path(params[:switch_model_id], params[:firmware_id],mib), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-sm btn-danger glyphicon glyphicon-remove" %></td>
       </tr>
     <% end %>

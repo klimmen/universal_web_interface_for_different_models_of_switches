@@ -21,8 +21,8 @@
             <% end %></td>
         <td>
           <%= form_for :role, url: user_path(user), method: "put" do |f| %>
-            <%= f.select :user_role, options_for_select(@roles.collect { |c| [c.name, c.name] }), {}, { :class => 'selectpicker' }%>
-           <%= f.submit %>
+            <%= f.select :user_role, options_for_select(@roles.collect { |c| [c.name, c.name] }), {}, { :class => 'selectpicker '}%>
+           <%= f.submit, class: "btn-sm btn-danger " %>
           <% end %>
         </td>     
         <td><%= link_to '', user_path(user), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-sm btn-danger glyphicon glyphicon-remove" %></td>

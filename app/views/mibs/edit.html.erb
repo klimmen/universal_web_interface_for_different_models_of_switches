@@ -18,7 +18,7 @@
   </div>
 
   <div >
-    <%= f.select :value_oid_id , options_for_select(@value_oids.collect { |c| [c.name, c.id] }), {}, { :class => 'select' } %>
+    <%= f.select :value_oid_id , options_for_select(@value_oids.collect { |oid| [oid.name, oid.id] }), {}, { :class => 'selectpicker' } %>
   </div>
   <br>
   <div class="actions">

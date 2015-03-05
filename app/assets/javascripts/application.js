@@ -12,6 +12,14 @@
 //
 //= require jquery
 //= require bootstrap-sprockets
+//= require bootstrap-select
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+
+//$(document).ready(function(){
+//$('.selectpicker').selectpicker({
+//      style: 'btn-info',
+//      size: 1
+//  });
+//});
