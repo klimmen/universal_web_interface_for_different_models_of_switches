@@ -1,4 +1,5 @@
 class ValueOidsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_value_oid, only: [:show, :edit, :update, :destroy]
 
   # GET /value_oids

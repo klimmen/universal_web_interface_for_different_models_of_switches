@@ -1,4 +1,5 @@
 class MibsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_mib, only: [:edit, :update, :destroy]
   before_action :set_vasue_oids, only: [:new, :edit]
 

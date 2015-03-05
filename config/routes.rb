@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :value_oids
 
   devise_for :users
+  resources :users, :only => [:show, :index, :destroy, :update]
 
   resources :switch_models, only: [:index, :new, :edit, :create, :update, :destroy] do
     resources :firmwares, only: [:new, :edit, :create, :update, :destroy] do 
