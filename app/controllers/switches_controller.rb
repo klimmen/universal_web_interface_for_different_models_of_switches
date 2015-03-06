@@ -69,9 +69,8 @@ class SwitchesController < ApplicationController
   end
 
   def ports
-    @switch = Switch.find_by_ip(set_ip_switch)
-    @data = @switch.switch_info
-
+    comutator = Comutator.new(@switch)
+    @data = @comutator.switch_info
   end
 
   def vlans
