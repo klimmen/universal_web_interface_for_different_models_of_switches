@@ -4,10 +4,7 @@ class Mib < ActiveRecord::Base
     has_many :firmwares, through: :firmware_mibs
 
 
-#include SNMP
-
-
-def initialize(ip,snmp)
+def first_param(ip,snmp)
  	@host = ip
  	@community = snmp
  end
@@ -33,7 +30,18 @@ def initialize(ip,snmp)
 		end
 		walk_values
   end
-
+  
+  def snmp_get_test(oid)
+    case oid
+      when "1.3.6.1.4.1.890.1.5.8.72.1.1.0" then return "4"
+      when "1.3.6.1.4.1.890.1.5.8.72.1.2.0" then return "0"
+      when "1.3.6.1.4.1.890.1.5.8.72.1.3.0" then return "AADF"
+      when "1.3.6.1.4.1.890.1.5.8.72.1.4.0" then return "2"
+      when "1.3.6.1.4.1.890.1.5.8.72.1.5.0" then return "23"
+      when "1.3.6.1.4.1.890.1.5.8.72.1.6.0" then return "12"
+      when "1.3.6.1.4.1.890.1.5.8.72.1.7.0" then return "2013"
+    end
+  end
 
 
 
