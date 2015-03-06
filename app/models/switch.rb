@@ -7,12 +7,10 @@ class Switch < ActiveRecord::Base
   validates :pass, :presence => true
   validates :snmp, :presence => true
   
- # def self.find_by_identifier(identifier)
- #   find(:first, :conditions => ['id = ? OR ip = ?', id, ip])
-  #end
 
- # def to_param
- #  ip
+
+ # def check_mac
+ # 	.unpack("H2H2H2H2H2H2").join(":")
  # end
 
 end

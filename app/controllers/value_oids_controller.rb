@@ -23,7 +23,7 @@ class ValueOidsController < ApplicationController
 
     respond_to do |format|
       if @value_oid.save
-        format.html { redirect_to @value_oid, notice: 'Value oid was successfully created.' }
+        format.html { redirect_to value_oids_url, notice: 'Value oid was successfully created.' }
       else
         format.html { render :new }
       end
@@ -34,7 +34,7 @@ class ValueOidsController < ApplicationController
   def update
     respond_to do |format|
       if @value_oid.update(value_oid_params)
-        format.html { redirect_to @value_oid, notice: 'Value oid was successfully updated.' }
+        format.html { redirect_to value_oids_url, notice: 'Value oid was successfully updated.' }
       else
         format.html { render :edit }
       end

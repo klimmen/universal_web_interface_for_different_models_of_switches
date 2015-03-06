@@ -69,6 +69,8 @@ class SwitchesController < ApplicationController
   end
 
   def ports
+    @switch = Switch.find_by_ip(set_ip_switch)
+    @data = @switch.switch_info
 
   end
 
