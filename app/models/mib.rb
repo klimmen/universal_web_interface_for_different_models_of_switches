@@ -33,6 +33,8 @@ def first_param(ip,snmp)
   
   def snmp_get_test(oid)
     case oid
+     #when "1.3.6.1.2.1.1.1.0"              then return  "ZTE Ethernet Switch  ZXR10 2952-SI, Version: V2.0.12.W"
+      when "1.3.6.1.2.1.1.1.0"             then return "ES3500-8PD" 
       when "1.3.6.1.4.1.890.1.5.8.72.1.1.0" then return "4"
       when "1.3.6.1.4.1.890.1.5.8.72.1.2.0" then return "0"
       when "1.3.6.1.4.1.890.1.5.8.72.1.3.0" then return "AADF"

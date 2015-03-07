@@ -70,7 +70,7 @@ class SwitchesController < ApplicationController
 
   def ports
     comutator = Comutator.new(@switch)
-    @data = @comutator.switch_info
+    @data = comutator.switch_info
   end
 
   def vlans

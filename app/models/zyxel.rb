@@ -1,35 +1,23 @@
 class Zyxel
-	def def_firmware(host,snmp)
-		id_value_oids = {}
-		value_oids = ValueOid.all
-		value_oids.each do |value_oid|
-			firmwape_part_num =  value_oid.name.slice(/(?<=getFirmwarePart_)\d/)
-			id_value_oids[firmwape_part_num.to_i] = value_oid.id if !firmwape_part_num.nil?
-		end
+
+	def def_firmware(model, host, snmp)
+		value_oid = ValueOid.find_by_name("getFirmwarePart_3")
 		mib = Mib.new
 		mib.first_param(host,snmp)
-		firmwares = Firmware.all
-		firmware_results = []
-		firmwares.each do |firmware|
-			i = 0
-			(1..7).each do |i|
-				mib_name = firmware.mibs.find_by_value_oid_id(id_value_oids[i])
-				if !mib_name.nil?
-					i+=1
-					firmware_results << mib.snmp_get_test(mib_name.name)
+		switch_models = SwitchModel.all
+		switch_models.each do |switch_model|
+			if switch_model.name == model 
+				switch_model.firmwares.each do |firmware|
+					mibb = firmware.mibs.find_by_value_oid_id(value_oid.id)
+					if !mib.snmp_get_test(mibb.name).nil?
+						return firmware.name
+					end				
 				end
-  		end
-  		break if i == 7
-		end  
-	  firmwares.each do |firmware|
-	    i = 0
-			firmware_results.each do |firmware_result|
-   			i +=1 if !firmware.name.slice(/#{firmware_result}/).nil?
-			end
-			if i == 7
-				p firmware.name
-			  return firmware 
-		  end
-		end 
+			end	
+		end
+
 	end
+
 end
+
+

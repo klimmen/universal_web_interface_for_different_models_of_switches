@@ -10,16 +10,18 @@ end
 
 
   def switch_info
-		snmp_do = Mib.new(@host,@snmp)
-		p model = snmp_do.snmp_get("1.3.6.1.2.1.1.1.0")
+		mib = Mib.new
+		mib.first_param(@host,@snmp)
+		model = mib.snmp_get_test("1.3.6.1.2.1.1.1.0")
 		if model.slice(/ZTE/)
-			zte= Zte.new
-			return zte.firmware(@host,@snmp)
-		else 
+			{model: model.slice(/.+(?=,)/), firmware: model.slice(/(?<=Version: ).+/)}
+		elsif model.slice(/(ES|MES)/) 
 			zyxel = Zyxel.new
-			return zyxel.firmware(@host,@snmp)
+			{model: model, firmware: zyxel.def_firmware(model, @host, @snmp)}
 	  end
   end
 
 
 end
+
+
