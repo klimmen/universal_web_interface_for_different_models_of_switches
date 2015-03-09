@@ -1,1 +1,36 @@
-<h4>name - <%= @switch.name %>, ip - <%= @switch.ip %>,  model - <%=@data[:model]%>, firmware - <%=@data[:firmware]%>, mac - *******</h4>
+<strong>name - </strong><strong id="switch_name"><%= @data[:name] %></strong>
+<strong>, ip - </strong><strong id="switch_ip"><%= @data[:ip] %></strong>
+<strong>, model - </strong><strong id="switch_model"><%=@data[:model]%></strong> 
+<strong>, firmware - </strong><strong id="switch_firmware"><%=@data[:firmware]%></strong>
+<strong>, mac - </strong><strong id="switch_mac"><%=@data[:mac]%></strong> 
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr >
+      <th>num</th>
+      <th>status</th>
+      <th>name</th>
+      <th>type</th>
+      <th>speed_duplex</th>
+      <th>Save</th>
+    </tr>
+  </thead>
+  <tbody>  	
+	  <%  @ports[:port_name].each_index do |i|%>
+	   	<%= form_for :port, url: "/#{@switch.ip}/ports" do |f|  %>
+	    	<tr >
+	  			<td class="col-md-1"><%=f.label (i+1)%></td>
+					<td class="col-md-1"><%= f.check_box i, {:checked=>@ports[:port_admin_status][i]} %></td>
+					<td class="col-md-2"><%= f.text_field :port_name, :value => @ports[:port_name][i] %></td>	
+					<td class="col-md-2"><%= f.label @ports[:port_type][i] %>M</td>
+					<%if @ports[:port_type][i] == 100 %>
+						<td class="col-md-2"><%= f.select :city_id, options_for_select([['auto', 'auto'], ['10M / Full Duplex', '10M / Full Duplex'], ['10M / Half Duplex', '10M / Half Duplex'], ['100M / Full Duplex', '100M / Full Duplex'], ['100M / Half Duplex', '100M / Half Duplex'] ], @ports[:port_speed_duplex][i]) %></td>
+					<%elsif @ports[:port_type][i] == 1000 %>
+						<td class="col-md-2"><%= f.select :city_id, options_for_select([['auto', 'auto'], ['100M / Full Duplex', '100M / Full Duplex'], ['100M / Half Duplex', '100M / Half Duplex'], ['1000M / Full Duplex', '100M / Full Duplex'], ['1000M / Half Duplex', '100M / Half Duplex'] ], @ports[:port_speed_duplex][i]) %></td>
+					<%end%>
+				<td class="col-md-2"><%= f.submit %></td>
+			<%end%>
+		<%end%>	
+	</tbody>
+</table>
+
+

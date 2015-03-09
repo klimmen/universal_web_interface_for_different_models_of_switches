@@ -1,11 +1,11 @@
 class Comutator
 	
 def initialize(switch)
- 	@host = switch.ip
- 	@community = switch.snmp
- 	@login = switch.login
- 	@pass = switch.pass
- 	@snmp = switch.snmp
+	@switch_name = switch.name
+	@host = switch.ip
+	@login = switch.login
+	@pass = switch.pass
+	@snmp = switch.snmp
 end
 
 
@@ -14,13 +14,33 @@ end
 		mib.first_param(@host,@snmp)
 		model = mib.snmp_get_test("1.3.6.1.2.1.1.1.0")
 		if model.slice(/ZTE/)
-			{model: model.slice(/.+(?=,)/), firmware: model.slice(/(?<=Version: ).+/)}
+			zte = Zte.new(@host, @snmp)
+			firmware =  zte.def_firmware(model)
+			model = model.slice(/.+(?=,)/)
+			mac = zte.mac(model, firmware)
 		elsif model.slice(/(ES|MES)/) 
-			zyxel = Zyxel.new
-			{model: model, firmware: zyxel.def_firmware(model, @host, @snmp)}
+			zyxel = Zyxel.new(@host, @snmp)
+			firmware = zyxel.def_firmware(model)
+			mac = zyxel.mac(model, firmware)
 	  end
+	 {name: @switch_name, ip: @host, model: model, firmware: firmware, mac: mac}
   end
 
+  def ports(data)
+		mib = Mib.new
+		mib.first_param(@host,@snmp)
+		result_ports = {}
+  	if data[:model].slice(/ZTE/)
+
+  	elsif data[:model].slice(/(ES|MES)/)
+  		zyxel = Zyxel.new(@host, @snmp, data[:model], data[:firmware])
+  		result_ports[:port_admin_status]=zyxel.port_admin_status
+  		result_ports[:port_name]=zyxel.port_name
+  		result_ports[:port_type]=zyxel.port_type
+  		result_ports[:port_speed_duplex]=zyxel.port_speed_duplex
+  	end
+  	result_ports
+  end
 
 end
 
