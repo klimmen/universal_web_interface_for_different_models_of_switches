@@ -3,7 +3,7 @@ class SwitchesController < ApplicationController
   load_and_authorize_resource
   #skip_load_resource :only => :create
   before_action :set_switch, only: [:show, :edit, :update, :destroy]
-  before_action :set_switch_info, only: [:information_about_switch, :ports, :vlans]
+  before_action :set_switch_info, only: [:information_about_switch, :ports, :vlans, :update_ports]
   # GET /switches
   # GET /switches.json
   def index
@@ -73,7 +73,7 @@ class SwitchesController < ApplicationController
   end
 
   def update_ports
-    p params[:ports]
+    render "ports"
   end
 
   def vlans
@@ -89,7 +89,12 @@ class SwitchesController < ApplicationController
     def set_switch_info
       @switch = Switch.find_by_ip(params[:ip])
       @comutator = Comutator.new(@switch)
-      @data = @comutator.switch_info
+      if params[:ports].nil?
+        @data = @comutator.switch_info
+      else
+        @data = {name: params[:ports][:name], ip: params[:ports][:ip], model: params[:ports][:model], firmware: params[:ports][:firmware], mac: params[:ports][:mac]}
+        @ports = @comutator.ports(@data)
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

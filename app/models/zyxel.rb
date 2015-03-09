@@ -31,14 +31,17 @@ class Zyxel
 		result_mib = SwitchModel.find_by_name(model).firmwares.find_by_name(firmware).mibs.find_by_value_oid_id(value_oid.id)
 		mac = mib.snmp_get_test(result_mib.name)
 	end
-
-	def port_admin_status
-		value_oid = ValueOid.find_by_name("walkPortAdminStatus")
+  
+  def result(value_oid_name_name)
+  	value_oid = ValueOid.find_by_name(value_oid_name_name)
 		mib = Mib.new
 		mib.first_param(@host, @snmp)
 		result_mib = SwitchModel.find_by_name(@model).firmwares.find_by_name(@firmware).mibs.find_by_value_oid_id(value_oid.id)
-		admin_status = mib.test_snmp_walk(result_mib.name)
-
+		mib.test_snmp_walk(result_mib.name) 	
+  end
+	
+	def port_admin_status
+		admin_status = result("walkPortAdminStatus")
 		admin_status.map! do |status|
   		if status == 1
   			true 
@@ -49,28 +52,16 @@ class Zyxel
 	end	
   
   def port_name
-  	value_oid = ValueOid.find_by_name("walkPortName")
-  	mib = Mib.new
-		mib.first_param(@host, @snmp)
-		result_mib = SwitchModel.find_by_name(@model).firmwares.find_by_name(@firmware).mibs.find_by_value_oid_id(value_oid.id)
-		names = mib.test_snmp_walk(result_mib.name)
+  	names = result("walkPortName")
   	names.map! {|name| name.to_sym}
   end
   
   def port_type
-  	value_oid = ValueOid.find_by_name("walkPortType")
-  	mib = Mib.new
-		mib.first_param(@host, @snmp)
-		result_mib = SwitchModel.find_by_name(@model).firmwares.find_by_name(@firmware).mibs.find_by_value_oid_id(value_oid.id)
-		mib.test_snmp_walk(result_mib.name)
+  	type = result("walkPortType")
   end
   
   def port_speed_duplex
-  	value_oid = ValueOid.find_by_name("walkPortSpeedDuplex")
-  	mib = Mib.new
-		mib.first_param(@host, @snmp)
-		result_mib = SwitchModel.find_by_name(@model).firmwares.find_by_name(@firmware).mibs.find_by_value_oid_id(value_oid.id)
-		mib.test_snmp_walk(result_mib.name)
+  	mspeed_duplex= result("walkPortSpeedDuplex")
   end
 
 end

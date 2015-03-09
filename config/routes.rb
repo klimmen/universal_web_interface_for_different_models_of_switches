@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   get ':ip' => 'switches#information_about_switch', as: "ip", constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ }
   get ':ip/ports' => 'switches#ports', as: "ports", constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ }
   get ':ip/vlans' => 'switches#vlans', as: "vlans", constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ }
-  post ':ip/ports' => 'switches#ports', as: "update_ports", constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ }
+  post ':ip/ports' => 'switches#update_ports', as: "update_ports", constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ }
                                         
   root 'welcome#index'
 
