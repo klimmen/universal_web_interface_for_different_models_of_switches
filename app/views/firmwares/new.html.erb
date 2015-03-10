@@ -1,12 +1,12 @@
 <h1>New Firmware</h1>
 
-<%= form_for([:switch_model, @firmware]) do |f| %>
-  <% if @firmware.errors.any? %>
+<%= form_for([:switch_model, @subject]) do |f| %>
+  <% if @subject.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@firmware.errors.count, "error") %> prohibited this firmware from being saved:</h2>
+      <h2><%= pluralize(@subject.errors.count, "error") %> prohibited this firmware from being saved:</h2>
 
       <ul>
-      <% @firmware.errors.full_messages.each do |message| %>
+      <% @subject.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
       </ul>

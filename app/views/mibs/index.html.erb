@@ -1,9 +1,9 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Listing Mibs</h1>
-<% if !@mibs.blank? then %>
-<h3>Model - <%=@mibs.first.firmwares.first.switch_model.name %></h3>
-<h3>Firmware - <%=@mibs.first.firmwares.first.name %></h3>
+<% if !@subjects.blank? then %>
+<h3>Model - <%=@subjects.first.firmwares.first.switch_model.name %></h3>
+<h3>Firmware - <%=@subjects.first.firmwares.first.name %></h3>
 <% end %>
 <table class="table">
   <thead>
@@ -15,7 +15,7 @@
   </thead>
 
   <tbody>
-    <% @mibs.each do |mib| %>
+    <% @subjects.each do |mib| %>
       <tr>
         <td><%= mib.name %></td>
         <td><%= mib.value_oid.name %></td>

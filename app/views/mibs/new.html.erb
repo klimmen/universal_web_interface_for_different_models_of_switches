@@ -1,11 +1,11 @@
 <h1>New Mib</h1>
-<%= form_for([:switch_model, :firmware, @mib]) do |f| %>
-  <% if @mib.errors.any? %>
+<%= form_for([:switch_model, :firmware, @subject]) do |f| %>
+  <% if @subject.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@mib.errors.count, "error") %> prohibited this mib from being saved:</h2>
+      <h2><%= pluralize(@subject.errors.count, "error") %> prohibited this mib from being saved:</h2>
 
       <ul>
-      <% @mib.errors.full_messages.each do |message| %>
+      <% @subject.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
       </ul>

@@ -3,7 +3,7 @@
 <strong>, model - </strong><strong id="switch_model"><%=@data[:model]%></strong> 
 <strong>, firmware - </strong><strong id="switch_firmware"><%=@data[:firmware]%></strong>
 <strong>, mac - </strong><strong id="switch_mac"><%=@data[:mac]%></strong> 
-<%= form_for :ports, url: "/#{@switch.ip}/ports" do |f|  %>
+<%= form_for :ports, url: "/#{@subject.ip}/ports" do |f|  %>
 	<%= f.hidden_field :name, value: @data[:name] %>
 	<%= f.hidden_field :ip, value: @data[:ip] %>
 	<%= f.hidden_field :model, value: @data[:model] %>

@@ -1,10 +1,10 @@
-<%= form_for(@switch) do |f| %>
-  <% if @switch.errors.any? %>
+<%= form_for(@subject) do |f| %>
+  <% if @subject.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@switch.errors.count, "error") %> prohibited this switch from being saved:</h2>
+      <h2><%= pluralize(@subject.errors.count, "error") %> prohibited this switch from being saved:</h2>
 
       <ul>
-      <% @switch.errors.full_messages.each do |message| %>
+      <% @subject.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
       </ul>

@@ -1,4 +1,5 @@
 class Switch < ActiveRecord::Base
+	
   require 'resolv'
   validates :name, :presence => true,length: 2..20
   validates :ip, :presence => true, :uniqueness => true,

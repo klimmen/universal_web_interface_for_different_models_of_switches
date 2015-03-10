@@ -1,16 +1,20 @@
 class ValueOidsController < ApplicationController
+  include Finder
+  CURRENT_CLASS = ValueOid
+
   load_and_authorize_resource
-  before_action :set_value_oid, only: [:edit, :update, :destroy]
+
+  before_filter(only: [ :edit, :update, :destroy]) {set_curent_class(CURRENT_CLASS)}
 
   # GET /value_oids
   def index
-    @value_oids = ValueOid.all
+    @subjects = ValueOid.all
   end
 
 
   # GET /value_oids/new
   def new
-    @value_oid = ValueOid.new
+    @subject = ValueOid.new
   end
 
   # GET /value_oids/1/edit
@@ -19,10 +23,10 @@ class ValueOidsController < ApplicationController
 
   # POST /value_oids
   def create
-    @value_oid = ValueOid.new(value_oid_params)
+    @subject = ValueOid.new(value_oid_params)
 
     respond_to do |format|
-      if @value_oid.save
+      if @subject.save
         format.html { redirect_to value_oids_url, notice: 'Value oid was successfully created.' }
       else
         format.html { render :new }
@@ -33,7 +37,7 @@ class ValueOidsController < ApplicationController
   # PATCH/PUT /value_oids/1
   def update
     respond_to do |format|
-      if @value_oid.update(value_oid_params)
+      if @subject.update(value_oid_params)
         format.html { redirect_to value_oids_url, notice: 'Value oid was successfully updated.' }
       else
         format.html { render :edit }
@@ -43,7 +47,7 @@ class ValueOidsController < ApplicationController
 
   # DELETE /value_oids/1
   def destroy
-    @value_oid.destroy
+    @subject.destroy
     respond_to do |format|
       format.html { redirect_to value_oids_url, notice: 'Value oid was successfully destroyed.' }
     end
@@ -51,9 +55,6 @@ class ValueOidsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_value_oid
-      @value_oid = ValueOid.find(params[:id])
-    end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def value_oid_params
