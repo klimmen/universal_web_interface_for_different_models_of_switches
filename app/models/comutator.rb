@@ -12,7 +12,7 @@ end
   def switch_info
 		mib = Mib.new
 		mib.first_param(@host,@snmp)
-		model = mib.snmp_get_test("1.3.6.1.2.1.1.1.0")
+		p model = mib.snmp_get("1.3.6.1.2.1.1.1.0").to_s
 		if model.slice(/ZTE/)
 			zte = Zte.new(@host, @snmp)
 			firmware =  zte.def_firmware(model)
@@ -35,9 +35,11 @@ end
   	elsif data[:model].slice(/(ES|MES)/)
   		zyxel = Zyxel.new(@host, @snmp, data[:model], data[:firmware])
   		result_ports[:port_admin_status]=zyxel.port_admin_status
-  		result_ports[:port_name]=zyxel.port_name
-  		result_ports[:port_type]=zyxel.port_type
-  		result_ports[:port_speed_duplex]=zyxel.port_speed_duplex
+  		p "33333333333333333333"
+  		p result_ports
+  		#result_ports[:port_name]=zyxel.port_name
+  		#result_ports[:port_type]=zyxel.port_type
+  		#result_ports[:port_speed_duplex]=zyxel.port_speed_duplex
   	end
   	result_ports
   end

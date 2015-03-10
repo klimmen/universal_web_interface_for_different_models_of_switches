@@ -23,12 +23,13 @@ def first_param(ip,snmp)
 
   def snmp_walk(oid)
   	walk_values = []
-		SNMP::Manager.new(:host => @host, :community => @community) do |manager|
+		SNMP::Manager.open(:host => @host, :community => @community) do |manager|
   	manager.walk(oid) do |vb| 
-  	walk_values<<vb.value 
+  	walk_values<<vb.value.to_i
   		end
 		end
-		walk_values
+    p "222222222222"
+		p  walk_values
   end
   
   def snmp_get_test(oid)

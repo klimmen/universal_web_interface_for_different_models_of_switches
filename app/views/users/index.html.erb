@@ -11,7 +11,7 @@
   </thead>
 
   <tbody>
-     <% @users.each do |user| %>
+     <% @subjects.each do |user| %>
       <tr >
         <td class="col-md-2"><%= user.email %></td>
         <td class="col-md-2"><%if user.roles.blank? %>
@@ -22,7 +22,7 @@
         <td>
           <%= form_for :role, url: user_path(user), method: "put" do |f| %>
             <%= f.select :user_role, options_for_select(@roles.collect { |c| [c.name, c.name] }), {}, { :class => 'selectpicker '}%>
-           <%= f.submit, class: "btn-sm btn-danger " %>
+           <%= f.submit %>
           <% end %>
         </td>     
         <td><%= link_to '', user_path(user), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-sm btn-danger glyphicon glyphicon-remove" %></td>

@@ -1,12 +1,16 @@
 class UsersController < ApplicationController
+  include Finder
+  CURRENT_CLASS = User
 
-	load_and_authorize_resource
+  load_and_authorize_resource
+
+  before_filter(only: [:show, :destroy]) {set_curent_class(CURRENT_CLASS)}
 	skip_authorize_resource :only => :show
 
-	before_action :set_user, only: [:show, :destroy]
+#	before_action :set_user, only: [:show, :destroy]
 
 	def index
-		@users = User.all
+		@subjects = User.all
 		@roles = Role.all
 	end
 
@@ -16,15 +20,15 @@ class UsersController < ApplicationController
 	end
 
 	def update
-		@user = User.find(user_params[:id])
-		@user.remove_role @user.roles.first.name if !@user.roles.blank? 
-		@user.add_role user_params[:name]
+		@subject = User.find(user_params[:id])
+		@subject.remove_role @subject.roles.first.name if !@subject.roles.blank? 
+		@subject.add_role user_params[:name]
 		flash[:notice] = "Successfully ."
 		redirect_to users_path
 	end
 	
 	def destroy
-    	if @user.destroy
+    	if @subject.destroy
      	 flash[:notice] = "Successfully deleted User."
      	 redirect_to users_path
    	 end
@@ -33,9 +37,9 @@ class UsersController < ApplicationController
 
   private
 
-  	 def set_user
-      @user = User.find(params[:id])
-    end
+  #	 def set_user
+  #    @user = User.find(params[:id])
+  #  end
 
     def user_params
       params.permit().tap do |whitelisted|

@@ -7,11 +7,6 @@ class Switch < ActiveRecord::Base
   validates :login, :presence => true
   validates :pass, :presence => true
   validates :snmp, :presence => true
-  
-
-
- # def check_mac
- # 	.unpack("H2H2H2H2H2H2").join(":")
- # end
+ 
 
 end

@@ -19,36 +19,36 @@ class Zyxel
 		rusult_firmware = ""
 		firmware = switch_model.firmwares.first
 		rusult_value_oids.each do |rusult_value_oid|
-			rusult_firmware << mib.snmp_get_test(firmware.mibs.find_by_value_oid_id(rusult_value_oid.id).name)
+
+			rusult_firmware << mib.snmp_get(firmware.mibs.find_by_value_oid_id(rusult_value_oid.id).name).to_s
 		end
 		rusult_firmware	
 	end
 
 	def mac(model, firmware)
-		value_oid = ValueOid.find_by_name("getSwitchMac")
+		value_oid = ValueOid.find_by_name("getSwitchMAC")
 		mib = Mib.new
 		mib.first_param(@host, @snmp)
 		result_mib = SwitchModel.find_by_name(model).firmwares.find_by_name(firmware).mibs.find_by_value_oid_id(value_oid.id)
-		mac = mib.snmp_get_test(result_mib.name)
+		mac = mib.snmp_get(result_mib.name).to_s.unpack("H2H2H2H2H2H2H2H2H2H2H2").join(":").slice(/(?<=80:00:03:7a:03:).+/)
 	end
   
   def result(value_oid_name_name)
   	value_oid = ValueOid.find_by_name(value_oid_name_name)
+  	p "#{value_oid.name}!!!!!!!!!!!!!!!!!!1"
 		mib = Mib.new
 		mib.first_param(@host, @snmp)
 		result_mib = SwitchModel.find_by_name(@model).firmwares.find_by_name(@firmware).mibs.find_by_value_oid_id(value_oid.id)
-		mib.test_snmp_walk(result_mib.name) 	
+		p "#{result_mib.name}!!!!!!!!!!!!!!!!!!1"
+		 mib.snmp_walk(result_mib.name) 	
   end
 	
 	def port_admin_status
-		admin_status = result("walkPortAdminStatus")
-		admin_status.map! do |status|
-  		if status == 1
-  			true 
-  		elsif status == 2
-  			false
-  		end  			
-  	end
+		admin_status = result("walkAdminStatus")
+		
+  		p "1111111111111111"
+  		p admin_status			
+  	
 	end	
   
   def port_name

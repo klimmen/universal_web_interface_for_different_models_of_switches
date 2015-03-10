@@ -73,7 +73,8 @@ CURRENT_CLASS = Switch
   end
 
   def ports
-    @ports = @comutator.ports(@data)
+   p @ports = @comutator.ports(@data)
+
   end
 
   def update_ports
@@ -90,12 +91,12 @@ CURRENT_CLASS = Switch
     def set_switch_info
       @subject = Switch.find_by_ip(params[:ip])
       @comutator = Comutator.new(@subject)
-      if params[:ports].nil?
+    #  if params[:ports].nil?
         @data = @comutator.switch_info
-      else
-        @data = {name: params[:ports][:name], ip: params[:ports][:ip], model: params[:ports][:model], firmware: params[:ports][:firmware], mac: params[:ports][:mac]}
-        @ports = @comutator.ports(@data)
-      end
+     # else
+      #  @data = {name: params[:ports][:name], ip: params[:ports][:ip], model: params[:ports][:model], firmware: params[:ports][:firmware], mac: params[:ports][:mac]}
+       # @ports = @comutator.ports(@data)
+     # end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
