@@ -73,7 +73,7 @@ CURRENT_CLASS = Switch
   end
 
   def ports
-   p @ports = @comutator.ports(@data)
+   p  @ports = @comutator.ports(@data)
 
   end
 

@@ -13,56 +13,80 @@ class Zyxel
 		  rusult_value_oids << ValueOid.find_by_name("getFirmwarePart_#{i}")
 		end
 		
-		mib = Mib.new
-		mib.first_param(@host,@snmp)
 		switch_model = SwitchModel.find_by_name(model)
 		rusult_firmware = ""
 		firmware = switch_model.firmwares.first
-		rusult_value_oids.each do |rusult_value_oid|
 
-			rusult_firmware << mib.snmp_get(firmware.mibs.find_by_value_oid_id(rusult_value_oid.id).name).to_s
+		rusult_value_oids.each do |rusult_value_oid|
+		oid = firmware.mibs.find_by_value_oid_id(rusult_value_oid.id).name
+			rusult_firmware << Mib.snmp_get(oid, @host, @snmp).to_s
 		end
 		rusult_firmware	
 	end
 
 	def mac(model, firmware)
 		value_oid = ValueOid.find_by_name("getSwitchMAC")
-		mib = Mib.new
-		mib.first_param(@host, @snmp)
-		result_mib = SwitchModel.find_by_name(model).firmwares.find_by_name(firmware).mibs.find_by_value_oid_id(value_oid.id)
-		mac = mib.snmp_get(result_mib.name).to_s.unpack("H2H2H2H2H2H2H2H2H2H2H2").join(":").slice(/(?<=80:00:03:7a:03:).+/)
+		oid = SwitchModel.find_by_name(model).firmwares.find_by_name(firmware).mibs.find_by_value_oid_id(value_oid.id).name
+		mac = Mib.snmp_get(oid, @host, @snmp).to_s.unpack("H2H2H2H2H2H2H2H2H2H2H2").join(":").slice(/(?<=80:00:03:7a:03:).+/)
 	end
   
-  def result(value_oid_name_name)
-  	value_oid = ValueOid.find_by_name(value_oid_name_name)
-  	p "#{value_oid.name}!!!!!!!!!!!!!!!!!!1"
-		mib = Mib.new
-		mib.first_param(@host, @snmp)
-		result_mib = SwitchModel.find_by_name(@model).firmwares.find_by_name(@firmware).mibs.find_by_value_oid_id(value_oid.id)
-		p "#{result_mib.name}!!!!!!!!!!!!!!!!!!1"
-		 mib.snmp_walk(result_mib.name) 	
+  def get_oid(value_oid_name)
+  	value_oid = ValueOid.find_by_name(value_oid_name)
+		oid = SwitchModel.find_by_name(@model).firmwares.find_by_name(@firmware).mibs.find_by_value_oid_id(value_oid.id).name
   end
 	
 	def port_admin_status
-		admin_status = result("walkAdminStatus")
-		
-  		p "1111111111111111"
-  		p admin_status			
-  	
+			oid_ports_count =  get_oid("getPortsCount")
+  		oid_admin_status = get_oid("walkAdminStatus")
+  		ports_count = Mib.snmp_get(oid_ports_count, @host, @snmp).to_i
+  		admin_status = Mib.snmp_walk(oid_admin_status, @host, @snmp)
+  		admin_status = admin_status[0..(ports_count-1)]	
+  		admin_status.map! do |status| 
+  			if status == "1" 
+  				true 
+  		  else 
+  				false	
+  			end
+  		end
+
 	end	
   
   def port_name
-  	names = result("walkPortName")
+  	oid_names = get_oid("walkPortName")
+  	names = Mib.snmp_walk(oid_names, @host, @snmp)
   	names.map! {|name| name.to_sym}
   end
   
   def port_type
-  	type = result("walkPortType")
+  	oid_type = get_oid("walkPortType")
+  	type = Mib.snmp_walk(oid_type, @host, @snmp)
+  	type.map! do |status| 
+  			if status == "1" 
+  				1000 
+  		  else 
+  				100
+  			end
+  		end
   end
   
   def port_speed_duplex
-  	mspeed_duplex= result("walkPortSpeedDuplex")
+  	oid_speed_duplex= get_oid("walkPortSpeedDuplex")
+  	speed_duplex = Mib.snmp_walk(oid_speed_duplex, @host, @snmp)
   end
+
+  def link_state
+  	oid_link_state= get_oid("walkLinkState")
+  	link_state = Mib.snmp_walk(oid_link_state, @host, @snmp)
+  	link_state.map! do |status| 
+  		case status
+  			when "0" then "DOWN"
+  			when "1" then	"UP(copper)"
+  			when "2" then	"UP(fiber)" 		
+  		end 	
+  	end
+  	p link_state
+  end
+
 
 end
 

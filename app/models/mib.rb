@@ -4,14 +4,10 @@ class Mib < ActiveRecord::Base
     has_many :firmwares, through: :firmware_mibs
 
 
-def first_param(ip,snmp)
- 	@host = ip
- 	@community = snmp
- end
-
- def snmp_get(oid)
+ def self.snmp_get(oid, host, community)
+  
    	get_value = ''
-    SNMP::Manager.open(:host => @host, :community => @community ) do |manager|
+    SNMP::Manager.open(:host => host, :community => community ) do |manager|
     response = manager.get(oid)
     response.each_varbind do |vb|
       get_value = vb.value
@@ -21,15 +17,14 @@ def first_param(ip,snmp)
    
  end
 
-  def snmp_walk(oid)
+  def self.snmp_walk(oid, host, community)
   	walk_values = []
-		SNMP::Manager.open(:host => @host, :community => @community) do |manager|
+		SNMP::Manager.open(:host => host, :community => community) do |manager|
   	manager.walk(oid) do |vb| 
-  	walk_values<<vb.value.to_i
+  	walk_values<<vb.value.to_s
   		end
 		end
-    p "222222222222"
-		p  walk_values
+    walk_values
   end
   
   def snmp_get_test(oid)

@@ -15,6 +15,7 @@
       	<th>№</th>
       	<th>status</th>
       	<th>name</th>
+      	<th>link status</th>
       	<th>type</th>
       	<th>speed_duplex</th>
     	</tr>
@@ -24,14 +25,12 @@
 	   		<%= f.fields_for @ports[:port_name][i] do |port|  %>
 	    		<tr >
 	  				<td ><%= port.label (i+1)%></td>
+
 						<td ><%= port.check_box @ports[:port_name][i], {:checked=>@ports[:port_admin_status][i]}, "up", "down" %></td>
 						<td ><%= port.text_field :port_name, :value => @ports[:port_name][i] %></td>
+						<td ><%= port.label @ports[:port_link_state][i] %></td>
 						<td ><%= port.label @ports[:port_type][i] %>M</td>
-						<%if @ports[:port_type][i] == 100 %>
-							<td ><%= port.select :port_speed_duplex, options_for_select([['auto', 'auto'], ['10M / Full Duplex', '10M / Full Duplex'], ['10M / Half Duplex', '10M / Half Duplex'], ['100M / Full Duplex', '100M / Full Duplex'], ['100M / Half Duplex', '100M / Half Duplex'] ], @ports[:port_speed_duplex][i]) %></td>
-						<%elsif @ports[:port_type][i] == 1000 %>
-							<td ><%= port.select :port_speed_duplex, options_for_select([['auto', 'auto'], ['100M / Full Duplex', '100M / Full Duplex'], ['100M / Half Duplex', '100M / Half Duplex'], ['1000M / Full Duplex', '100M / Full Duplex'], ['1000M / Half Duplex', '1000M / Half Duplex'] ], @ports[:port_speed_duplex][i]) %></td>
-						<%end%>
+							<td ><%= port.select :port_speed_duplex, options_for_select(@ports[:port_select_options_speed_duplex][i], @ports[:port_speed_duplex][i]) %></td>
 				<%end%>
 			<%end%>	
 		</tbody>
