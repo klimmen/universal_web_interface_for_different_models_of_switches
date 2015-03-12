@@ -26,6 +26,23 @@ class Mib < ActiveRecord::Base
 		end
     walk_values
   end
+
+  def self.snmp_set_integer(oid, value, host, community)    
+    manager = SNMP::Manager.new(:host => host, :community => community)
+    varbind = SNMP::VarBind.new(oid, SNMP::Integer32.new(value))
+    manager.set(varbind)
+    manager.close
+  end
+
+  def self.snmp_set_string(oid, value, host, community)  
+      p"----------------------"
+    p oid
+    p value  
+    manager =  SNMP::Manager.new(:host => host, :community => community)
+    varbind =  SNMP::VarBind.new(oid, SNMP::OctetString.new(value))
+    manager.set(varbind)
+    manager.close
+  end
   
   def snmp_get_test(oid)
     case oid

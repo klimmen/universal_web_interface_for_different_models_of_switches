@@ -9,10 +9,11 @@
 <body>
   <header class="navbar navbar-fixed-top navbar-inverse">
     <div class="navbar-inner">
-      <div class="container">
+      <div class="container" >
         <%= link_to "Dictionary", root_path, id: "logo" %>
         <nav>
           <ul class="nav navbar-nav navbar-right">
+           <div id="spinnerContainer"></div>
             <% if can? :read, :stats %>
             <li><%= link_to "switches", switches_path %></li>
             <li><%= link_to "models", switch_models_path %></li>

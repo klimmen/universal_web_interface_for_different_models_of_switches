@@ -33,6 +33,7 @@ body {
   line-height: 1;
 }
 
+
 #logo:hover {
   color: #fff;
   text-decoration: none;
@@ -40,4 +41,13 @@ body {
 
 .center {
   text-align: center;
+}
+
+#spinnerContainer
+{
+    float: left;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1em;
+    width: 6em
 }
