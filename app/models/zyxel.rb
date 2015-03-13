@@ -8,7 +8,7 @@ class Zyxel
 		@firmware = firmware
   end
 
-	def def_firmware(model)
+	def get_firmware(model)
 		rusult_value_oids = []
 		(1..7).each do |i|
 		  rusult_value_oids << ValueOid.find_by_name("getFirmwarePart_#{i}")
@@ -25,7 +25,7 @@ class Zyxel
 		rusult_firmware	
 	end
 
-	def mac(model, firmware)
+	def get_mac(model, firmware)
 		value_oid = ValueOid.find_by_name("getSwitchMAC")
 		oid = SwitchModel.find_by_name(model).firmwares.find_by_name(firmware).mibs.find_by_value_oid_id(value_oid.id).name
 		mac = Mib.snmp_get(oid, @host, @snmp).to_s.unpack("H2H2H2H2H2H2H2H2H2H2H2").join(":").slice(/(?<=80:00:03:7a:03:).+/)
@@ -36,12 +36,14 @@ class Zyxel
 		oid = SwitchModel.find_by_name(@model).firmwares.find_by_name(@firmware).mibs.find_by_value_oid_id(value_oid.id).name
   end
 	
-  def ports_count
+###################port
+
+  def get_ports_count
     oid_ports_count =  get_oid("getPortsCount")
     ports_count = Mib.snmp_get(oid_ports_count, @host, @snmp).to_i
   end
 
-	def port_admin_status
+	def get_port_admin_status
 			oid_ports_count =  get_oid("getPortsCount")
   		oid_admin_status = get_oid("walkAdminStatus")
   		ports_count = Mib.snmp_get(oid_ports_count, @host, @snmp).to_i
@@ -57,13 +59,13 @@ class Zyxel
 
 	end	
   
-  def port_name
+  def get_port_name
   	oid_names = get_oid("walkPortName")
   	names = Mib.snmp_walk(oid_names, @host, @snmp)
   	names.map! {|name| name.to_sym}
   end
   
-  def port_type
+  def get_port_type
   	oid_type = get_oid("walkPortType")
   	type = Mib.snmp_walk(oid_type, @host, @snmp)
   	type.map! do |status| 
@@ -75,12 +77,12 @@ class Zyxel
   		end
   end
   
-  def port_speed_duplex
+  def get_port_speed_duplex
   	oid_speed_duplex= get_oid("walkPortSpeedDuplex")
   	speed_duplex = Mib.snmp_walk(oid_speed_duplex, @host, @snmp)
   end
 
-  def link_state
+  def get_link_state
   	oid_link_state= get_oid("walkLinkState")
   	link_state = Mib.snmp_walk(oid_link_state, @host, @snmp)
   	link_state.map! do |status| 
@@ -93,7 +95,7 @@ class Zyxel
   	link_state
   end
 
-  def view_port_types (port_types)
+  def get_view_port_types (port_types)
     speed_duplex = []
     port_types.each do |port_type| 
       if port_type == 100

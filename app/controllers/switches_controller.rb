@@ -84,6 +84,8 @@ CURRENT_CLASS = Switch
 
   def vlans
     @data = @comutator.check_switch_info
+    @vlans = @comutator.vlans(@data)
+    p @vlans[:vlan_vid]
   end
 
   private

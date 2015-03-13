@@ -3,7 +3,7 @@
 <strong>, model - </strong><strong id="switch_model"><%=@data[:model]%></strong> 
 <strong>, firmware - </strong><strong id="switch_firmware"><%=@data[:firmware]%></strong>
 <strong>, mac - </strong><strong id="switch_mac"><%=@data[:mac]%></strong> 
-<%= form_for :ports, url: "/#{@subject.ip}/ports" do |f|  %>
+<%= form_for :ports, url: ports_path(@subject.ip) do |f|  %>
 	<table class="table table-bordered table-striped">
   	<thead>
     	<tr >

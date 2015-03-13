@@ -23,19 +23,19 @@ end
 		model = Mib.snmp_get("1.3.6.1.2.1.1.1.0", @host,@snmp).to_s
 		if model.slice(/ZTE/)
 			zte = Zte.new(@host, @snmp)
-			firmware =  zte.def_firmware(model)
+			firmware =  zte.get_firmware(model)
 			model = model.slice(/.+(?=,)/)
-			mac = zte.mac(model, firmware)
+			mac = zte.get_mac(model, firmware)
 		elsif model.slice(/(ES|MES)/) 
 			zyxel = Zyxel.new(@host, @snmp)
-			firmware = zyxel.def_firmware(model)
-			mac = zyxel.mac(model, firmware)
+			firmware = zyxel.get_firmware(model)
+			mac = zyxel.get_mac(model, firmware)
 	  end
 	  result = {name: @switch_name, ip: @host, model: model, firmware: firmware, mac: mac}
 	  File.open("public/#{@user}_file_switch_info.json", 'w'){ |file| file.write  result.to_json }
     result
   end
-
+###################### ports
   def ports(data)
 		result_ports = {}
   	if data[:model].slice(/ZTE/)
@@ -43,16 +43,17 @@ end
   	elsif data[:model].slice(/(ES|MES)/)
   		switch_class = Zyxel.new(@host, @snmp, data[:model], data[:firmware])  		
   	end
-  	result_ports[:ports_count]=switch_class.ports_count
- 		result_ports[:port_admin_status]=switch_class.port_admin_status
- 		result_ports[:port_name]=switch_class.port_name
-		result_ports[:port_link_state]=switch_class.link_state
-	 	result_ports[:port_type]=switch_class.port_type
- 		result_ports[:port_speed_duplex]=switch_class.port_speed_duplex
- 		result_ports[:port_select_options_speed_duplex] = switch_class.view_port_types(result_ports[:port_type])
+  	result_ports[:ports_count]=switch_class.get_ports_count
+ 		result_ports[:port_admin_status]=switch_class.get_port_admin_status
+ 		result_ports[:port_name]=switch_class.get_port_name
+		result_ports[:port_link_state]=switch_class.get_link_state
+	 	result_ports[:port_type]=switch_class.get_port_type
+ 		result_ports[:port_speed_duplex]=switch_class.get_port_speed_duplex
+ 		result_ports[:port_select_options_speed_duplex] = switch_class.get_view_port_types(result_ports[:port_type])
  		File.open("public/#{@user}_file_ports_info.json", 'w'){ |file| file.write  result_ports.to_json }
   	result_ports
   end
+
 
   def update_ports(ports_info_from_view)
   	port_admin_status = []
@@ -91,6 +92,27 @@ end
     end
   end
   	
+##################### vlans
+  def vlans(data)
+    result_vlans = {vlan_name: [], vlan_activate: [], vlan_port_untag: []}
+    
+    if data[:model].slice(/ZTE/)
+      switch_class = Zte.new(@host, @snmp, data[:model], data[:firmware])
+    elsif data[:model].slice(/(ES|MES)/)
+      switch_class = Zyxel.new(@host, @snmp, data[:model], data[:firmware])     
+    end
+
+    result_vlans[:vlan_vid]=switch_class.get_vid
+    result_vlans[:vlan_vid].each do |vid|
+      result_vlans[:vlan_name] << switch_class.get_vlan_name(vid)
+    #  result_vlans[:vlan_port_tag]=switch_class.get_port_tag(vid)
+      result_vlans[:vlan_port_untag] << switch_class.get_port_untag(vid)
+    # result_vlans[:vlan_port_forbid]=switch_class.get_port_forbid(vid)
+       result_vlans[:vlan_activate] << switch_class.get_vlan_activate(vid)
+    end
+    p result_vlans
+  end
+
 end
 
 
