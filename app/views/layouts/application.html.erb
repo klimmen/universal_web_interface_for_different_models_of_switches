@@ -11,9 +11,9 @@
     <div class="navbar-inner">
       <div class="container" >
         <%= link_to "Dictionary", root_path, id: "logo" %>
+        <div id="spinnerContainer"></div>
         <nav>
-          <ul class="nav navbar-nav navbar-right">
-           <div id="spinnerContainer"></div>
+          <ul class="nav navbar-nav navbar-right">           
             <% if can? :read, :stats %>
             <li><%= link_to "switches", switches_path %></li>
             <li><%= link_to "models", switch_models_path %></li>
