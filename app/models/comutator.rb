@@ -43,14 +43,14 @@ end
   	elsif data[:model].slice(/(ES|MES)/)
   		switch_class = Zyxel.new(@host, @snmp, data[:model], data[:firmware])  		
   	end
-  		result_ports[:ports_count]=switch_class.ports_count
-  		result_ports[:port_admin_status]=switch_class.port_admin_status
-  		result_ports[:port_name]=switch_class.port_name
- 			result_ports[:port_link_state]=switch_class.link_state
- 			result_ports[:port_type]=switch_class.port_type
-  		result_ports[:port_speed_duplex]=switch_class.port_speed_duplex
-  		result_ports[:port_select_options_speed_duplex] = switch_class.view_port_types(result_ports[:port_type])
-  		File.open("public/#{@user}_file_ports_info.json", 'w'){ |file| file.write  result_ports.to_json }
+  	result_ports[:ports_count]=switch_class.ports_count
+ 		result_ports[:port_admin_status]=switch_class.port_admin_status
+ 		result_ports[:port_name]=switch_class.port_name
+		result_ports[:port_link_state]=switch_class.link_state
+	 	result_ports[:port_type]=switch_class.port_type
+ 		result_ports[:port_speed_duplex]=switch_class.port_speed_duplex
+ 		result_ports[:port_select_options_speed_duplex] = switch_class.view_port_types(result_ports[:port_type])
+ 		File.open("public/#{@user}_file_ports_info.json", 'w'){ |file| file.write  result_ports.to_json }
   	result_ports
   end
 
