@@ -21,6 +21,8 @@ class Zte
   	value_oid = ValueOid.find_by_name(value_oid_name)
 		oid = SwitchModel.find_by_name(@model).firmwares.find_by_name(@firmware).mibs.find_by_value_oid_id(value_oid.id).name
   end
+
+ ################################ get_ports
 	
 	def get_ports_count
     oid_ports_count =  get_oid("getPortsCount")
@@ -31,11 +33,10 @@ class Zte
   	oid_admin_status = get_oid("walkAdminStatus")
   	admin_status = Mib.snmp_walk(oid_admin_status, @host, @snmp)
   	admin_status.map! do |status| 
-  		if status == "1" 
-        "up" 
-      else 
-        "down"  
-      end
+      case status
+        when "1" then "up"
+        when "2" then "down"    
+      end   
   	end
 	end	
   
@@ -76,25 +77,25 @@ class Zte
 	def get_view_port_types (port_types)
   	speed_duplex = []
   	port_types.each do |port_type| 
-  		if port_type == 100
-  			speed_duplex << [['auto / auto', '4'], ['auto / Half duplex', '8'], ['auto / Full duplex', '12'], ['10 M / auto', '1'], ['10 M / Half duplex', '5'], ['10 M / Full duplex', '9'], ['100 M / auto ', '2'], ['100 M / Half duplex', '6'], ['100M / Full Duplex', '10']]	
-  		elsif port_type == 1000
-  			speed_duplex << [['auto / auto', '4'], ['auto / Half duplex', '8'], ['auto / Full duplex', '12'], ['100 M / auto', '2'], ['100 M / Half duplex', '6'], ['100 M / Full duplex', '10'], ['1000 M / auto', '3'], ['1000 M / Full duplex', '11']]
-  	 	end
+  		case port_type
+        when 100 
+          speed_duplex << [['auto / auto', '4'], ['auto / Half duplex', '8'], ['auto / Full duplex', '12'], ['10 M / auto', '1'], ['10 M / Half duplex', '5'], ['10 M / Full duplex', '9'], ['100 M / auto ', '2'], ['100 M / Half duplex', '6'], ['100M / Full Duplex', '10']] 
+        when 1000 
+        speed_duplex << [['auto / auto', '4'], ['auto / Half duplex', '8'], ['auto / Full duplex', '12'], ['100 M / auto', '2'], ['100 M / Half duplex', '6'], ['100 M / Full duplex', '10'], ['1000 M / auto', '3'], ['1000 M / Full duplex', '11']]    
+      end
   	end
     speed_duplex
  	end
 
+ ################################ set_ports
 
   def set_port_admin_status(port_num, value)
     oid_admin_status= get_oid("setAdminStatus")
-    if value == "up"
-      Mib.snmp_set_integer("#{oid_admin_status}.#{port_num}", 1, @host, @snmp)
-      p "up"
-    else 
-       Mib.snmp_set_integer("#{oid_admin_status}.#{port_num}", 2, @host, @snmp)
-       p "down"
-    end    
+    case value
+      when "up" then num = 1
+      when "down" then num = 2   
+    end 
+    Mib.snmp_set_integer("#{oid_admin_status}.#{port_num}", num, @host, @snmp) 
   end
 
   def set_port_name(port_num, value)
@@ -107,7 +108,7 @@ class Zte
     Mib.snmp_set_integer("#{oid_port_speed_duplex}.#{port_num}", value, @host, @snmp)
   end
 
-##################vlan
+ ################################ get_vlans
   def get_vid
     oid_vid = get_oid("walkVlanID")
     vlan_vid = Mib.snmp_walk(oid_vid, @host, @snmp)
@@ -116,7 +117,6 @@ class Zte
   def get_vlan_name(vid)
     oid_vlan_name = get_oid("getVlanName")
     vlan_name = Mib.snmp_get("#{oid_vlan_name}.#{vid}", @host, @snmp).to_s
-
   end
 
   def get_port_tag(vid)
@@ -132,7 +132,18 @@ class Zte
 
   def get_port_forbid(vid)
   end
- ################################DECODE TAG/UNTAG GET VALUE
+
+  def get_vlan_activate(vid)
+    oid_vlan_active = get_oid("getVlanActive")
+    vlan_activate = Mib.snmp_get("#{oid_vlan_active}.#{vid}", @host, @snmp).to_i
+    case vlan_activate
+      when 1 then vlan_activate = "yes"
+      when 2 then vlan_activate = "no"    
+    end 
+  end  
+
+ ################################ DECODE TAG/UNTAG GET VALUE
+
   def get_index_ports(value)
     decoder_keys = [8,4,2,1]
     index_ports = []
@@ -149,40 +160,31 @@ class Zte
     oid_value.map! {|value| value.to_i(16)}
     result = []
     oid_value.each do |value|
-     if !value.nil?
-      result << get_index_ports(value)
-     else 
-      result << [0]
-     end
+      if !value.nil?
+        result << get_index_ports(value)
+      else 
+        result << [0]
+      end
     end 
     ports = []
     result.each_index do |i|
-    result[i].map! do |port|
-      case port 
-      when 8 then port = 1
-     when 4 then port = 2
-     when 2 then port = 3
-     when 1 then port = 4
-     end
-      ports << i * 4 + port
-     end 
+      result[i].map! do |port|
+        case port 
+          when 8 then port = 1
+          when 4 then port = 2
+          when 2 then port = 3
+          when 1 then port = 4
+        end
+        ports << i * 4 + port
+      end 
     end
-
     ports
   end
 
-#################################
+ ################################ get_vlan
 
 
-  def get_vlan_activate(vid)
-    oid_vlan_active = get_oid("getVlanActive")
-    vlan_activate = Mib.snmp_get("#{oid_vlan_active}.#{vid}", @host, @snmp).to_i
-    if vlan_activate == 1  
-      vlan_activate = "yes"
-    else 
-      vlan_activate = "no"
-    end
-  end  
+ ################################ set_vlan
 
 
 end
