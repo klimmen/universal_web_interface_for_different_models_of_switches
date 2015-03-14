@@ -14,7 +14,6 @@
   <strong>Login:</strong>
   <%= @subject.login %>
 </p>
-
 <p>
   <strong>Pass:</strong>
   <%= @subject.pass %>
@@ -24,6 +23,5 @@
   <strong>Snmp:</strong>
   <%= @subject.snmp %>
 </p>
-
-<%= link_to 'Edit', edit_switch_path(@subject) %> |
-<%= link_to 'Back', switches_path %>
+<%= link_to 'Edit', edit_switch_path(@subject), :class =>"btn btn-primary" %> 
+<%= link_to 'Back', switches_path,:class =>"btn btn-primary" %>

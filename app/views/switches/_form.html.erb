@@ -1,4 +1,4 @@
-<%= form_for(@subject) do |f| %>
+<%=  bootstrap_form_for(@subject) do |f| %>
   <% if @subject.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@subject.errors.count, "error") %> prohibited this switch from being saved:</h2>
@@ -11,27 +11,23 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :name %><br>
+  <div class="field stand_width">
     <%= f.text_field :name %>
   </div>
-  <div class="field">
-    <%= f.label :ip %><br>
+  <div class="field stand_width">
     <%= f.text_field :ip %>
   </div>
-  <div class="field">
-    <%= f.label :login %><br>
+  <div class="field stand_width">
     <%= f.text_field :login %>
   </div>
-  <div class="field">
-    <%= f.label :pass %><br>
+  <div class="field stand_width">
     <%= f.text_field :pass %>
   </div>
-  <div class="field">
-    <%= f.label :snmp %><br>
+  <div class="field stand_width">
     <%= f.text_field :snmp %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit :class =>"btn btn-primary" %> 
+      <%= link_to 'Back', switches_path, :class =>"btn btn-primary " %>
   </div>
 <% end %>
