@@ -9,7 +9,7 @@ class Vlan
 	end
 
 	def vlans(data)
-    result_vlans = {vlan_name: [], vlan_activate: [], vlan_port_untag: []}
+    result_vlans = {vlan_name: [], vlan_activate: [], vlan_port_untag: [],vlan_port_tag: []}
     
     if data[:model].slice(/ZTE/)
       switch_class = Zte.new(@host, @snmp, data[:model], data[:firmware])
@@ -20,7 +20,7 @@ class Vlan
     result_vlans[:vlan_vid]=switch_class.get_vid
     result_vlans[:vlan_vid].each do |vid|
       result_vlans[:vlan_name] << switch_class.get_vlan_name(vid)
-    #  result_vlans[:vlan_port_tag]=switch_class.get_port_tag(vid)
+      result_vlans[:vlan_port_tag] << switch_class.get_port_tag(vid)
       result_vlans[:vlan_port_untag] << switch_class.get_port_untag(vid)
     # result_vlans[:vlan_port_forbid]=switch_class.get_port_forbid(vid)
       result_vlans[:vlan_activate] << switch_class.get_vlan_activate(vid)

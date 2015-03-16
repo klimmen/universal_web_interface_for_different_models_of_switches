@@ -121,7 +121,8 @@ class Zte
 
   def get_port_tag(vid)
     oid_ports_tag = get_oid("getPortsTag")
-    vlan_port_tag = Mib.snmp_get("#{oid_ports_tag}.#{vid}", @host, @snmp).to_i
+    vlan_port_tag = Mib.snmp_get("#{oid_ports_tag}.#{vid}", @host, @snmp).to_s.split("")
+    decoder_for_tag_untag(vlan_port_tag)
   end
 
   def get_port_untag(vid)
@@ -178,9 +179,25 @@ class Zte
         ports << i * 4 + port
       end 
     end
-    ports
+    output_format_ports(ports)
   end
 
+def output_format_ports (ports_arrey)
+  result_string = ""
+  ports_arrey.each_index do |i|
+    if ports_arrey[i-1] == ports_arrey[i]-1 && ports_arrey[i+1] == ports_arrey[i]+1 
+      result_string.chomp!(",")
+      result_string << "-" if result_string[-1] != "-" 
+    else
+      if ports_arrey.size-1 != i    
+       result_string << "#{ports_arrey[i]},"
+     else
+       result_string << "#{ports_arrey[i]}"
+     end
+    end
+  end
+  result_string
+end
  ################################ get_vlan
 
 

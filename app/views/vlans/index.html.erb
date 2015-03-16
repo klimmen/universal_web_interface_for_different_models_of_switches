@@ -1,2 +1,33 @@
-<h1>Vlans#index</h1>
-<p>Find me in app/views/vlans/index.html.erb</p>
+<strong><%= @data[:name] %></strong>
+<strong>  <%= @data[:ip] %></strong>
+<strong>model - <%=@data[:model]%></strong> 
+<strong>firmware - <%=@data[:firmware]%></strong>
+<strong>mac - <%=@data[:mac]%></strong> 
+	<table class="table table-bordered table-striped">
+  	<thead>
+    	<tr >
+      	<th>VID</th>
+      	<th>Vlane name</th>
+      	<th>Tag</th>
+      	<th>Untag</th>
+      	<th>Forbiden</th>
+      	<th>Active</th>
+        <th></th>
+    	</tr>
+  	</thead>
+  	<tbody>  	 
+      <% @vlans[:vlan_vid].each_index do |i|%>
+      <tr >
+	  	  <td class="col-md-1"><%=@vlans[:vlan_vid][i]%></td>
+        <td class="col-md-2"><%=@vlans[:vlan_name][i]%></td>
+        <td class="col-md-1"><%=@vlans[:vlan_port_tag][i]%></td>
+        <td class="col-md-2"><%=@vlans[:vlan_port_untag][i]%></td>
+        <td class="col-md-1"></td>
+        <td class="col-md-1"><%=@vlans[:vlan_activate][i]%></td>
+        <td class="col-md-2"><%= link_to '', "#", class: "btn-sm btn-primary glyphicon glyphicon-pencil" %>
+        <%= link_to '', "#", method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-sm btn-danger glyphicon glyphicon-remove" %></td>
+      </tr>
+      <%end%>
+			</tbody>
+	</table>
+	 <%= link_to 'Add vlan', "#", method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-primary" %></td>

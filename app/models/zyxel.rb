@@ -65,10 +65,12 @@ class Zyxel
   def get_port_type
   	oid_type = get_oid("walkPortType")
   	type = Mib.snmp_walk(oid_type, @host, @snmp)
+
+
   	type.map! do |status| 
       case status
         when "1" then 1000
-        when "2" then 100  
+        when "0" then 100  
       end
   	end
   end

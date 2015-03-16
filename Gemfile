@@ -30,9 +30,7 @@ gem 'spinjs-rails'
 
 gem 'simple_form'
 gem 'bootstrap_form'
-gem 'execjs'
 
-gem 'therubyracer'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
