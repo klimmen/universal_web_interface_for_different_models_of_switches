@@ -106,6 +106,11 @@ class Zyxel
     speed_duplex  
   end
 
+  def get_pvid
+    oid_names = get_oid("walkPVID")
+    names = Mib.snmp_walk(oid_names, @host, @snmp)
+  end
+
  ################################ set_ports
 
   def set_port_admin_status(port_num, value)
@@ -127,7 +132,133 @@ class Zyxel
     Mib.snmp_set_integer("#{oid_port_speed_duplex}.#{port_num}", value, @host, @snmp)
   end
 
- ################################ get_vlans
+  def set_port_pvid(pvid, value)
+    oid_port_pvid= get_oid("setPVID")
+    Mib.snmp_set_integer("#{oid_port_pvid}.#{pvid}", value, @host, @snmp)
+  end
+
+################################ get_vlans
+  def get_vid
+    oid_vid = get_oid("walkVlanID")
+    vlan_vid = Mib.snmp_walk(oid_vid, @host, @snmp)
+  end
+
+  def get_vlan_name(vid)
+    oid_vlan_name = get_oid("getVlanName")
+    vlan_name = Mib.snmp_get("#{oid_vlan_name}.#{vid}", @host, @snmp).to_s
+  end
+
+  def get_port_tag(vid)
+    oid_ports_untag = get_oid("getPortsUntag")
+    vlan_port_untag = Mib.snmp_get("#{oid_ports_untag}.#{vid}", @host, @snmp)
+    result = ""
+    vlan_port_untag.inspect.scan /x(..)/ do |groups_arr|
+      result << groups_arr[0]
+    end 
+    ports = decoder_for_tag_untag(result.split(""))
+    all_ports = (1..get_ports_count).collect {|i| i}
+    ports = vlan_port_fixed(vid) - ports
+    output_format_ports(ports)
+  end
+
+  def get_port_untag(vid)
+    oid_ports_untag = get_oid("getPortsUntag")
+    vlan_port_untag = Mib.snmp_get("#{oid_ports_untag}.#{vid}", @host, @snmp)
+    result = ""
+    vlan_port_untag.inspect.scan /x(..)/ do |groups_arr|
+      result << groups_arr[0]
+    end
+    ports = decoder_for_tag_untag(result.split(""))
+    ports = vlan_port_fixed(vid) & ports
+    output_format_ports(ports)
+  end
+
+  def vlan_port_fixed(vid)
+    oid_vlan_ports_fixed = get_oid("getVlanPortsFixed")
+    vlan_ports_fixed = Mib.snmp_get("#{oid_vlan_ports_fixed}.#{vid}", @host, @snmp)
+    result = ""
+    vlan_ports_fixed.inspect.scan /x(..)/ do |groups_arr|
+      result << groups_arr[0]
+    end
+    ports = decoder_for_tag_untag(result.split(""))
+  end
+
+  def vlan_port_forbidden(vid)
+    oid_vlan_ports_forbidden = get_oid("getVlanPortsForbidden")
+    vlan_ports_forbidden = Mib.snmp_get("#{oid_vlan_ports_forbidden}.#{vid}", @host, @snmp)
+    result = ""
+    vlan_ports_forbidden.inspect.scan /x(..)/ do |groups_arr|
+      result << groups_arr[0]
+    end
+    ports = decoder_for_tag_untag(result.split(""))
+    output_format_ports(ports)
+  end
+
+
+  def get_vlan_activate(vid)
+    oid_vlan_active = get_oid("getVlanActive")
+    vlan_activate = Mib.snmp_get("#{oid_vlan_active}.#{vid}", @host, @snmp).to_i
+    case vlan_activate
+      when 1 then vlan_activate = "yes"
+      when 2 then vlan_activate = "no"    
+    end 
+  end  
+
+  ################################ DECODE TAG/UNTAG GET VALUE
+
+  def get_index_ports(value)
+    decoder_keys = [8,4,2,1]
+    index_ports = []
+    decoder_keys.each do |decoder_key|
+      while value >= decoder_key do
+      value=value-decoder_key
+      index_ports << decoder_key
+      end
+    end
+    index_ports
+  end
+
+  def decoder_for_tag_untag(oid_value)
+    oid_value.map! {|value| value.to_i(16)}
+    result = []
+    oid_value.each do |value|
+      if !value.nil?
+        result << get_index_ports(value)
+      else 
+        result << [0]
+      end
+    end 
+    ports = []
+    result.each_index do |i|
+      result[i].map! do |port|
+        case port 
+          when 8 then port = 1
+          when 4 then port = 2
+          when 2 then port = 3
+          when 1 then port = 4
+        end
+        ports << i * 4 + port
+      end 
+    end
+    ports
+  end
+
+def output_format_ports (ports_arrey)
+  result_string = ""
+  ports_arrey.each_index do |i|
+    if ports_arrey[i-1] == ports_arrey[i]-1 && ports_arrey[i+1] == ports_arrey[i]+1 
+      result_string.chomp!(",")
+      result_string << "-" if result_string[-1] != "-" 
+    else
+      if ports_arrey.size-1 != i    
+       result_string << "#{ports_arrey[i]},"
+     else
+       result_string << "#{ports_arrey[i]}"
+     end
+    end
+  end
+  result_string
+end
  
  ################################ get_vlan
  

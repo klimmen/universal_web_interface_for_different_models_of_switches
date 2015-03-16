@@ -13,6 +13,7 @@
       	<th>link status</th>
       	<th>type</th>
       	<th>speed_duplex</th>
+      	<th>PVID</th>
     	</tr>
   	</thead>
   	<tbody>  	
@@ -25,6 +26,7 @@
 						<td ><%= port.label @ports[:port_link_state][i] %></td>
 						<td ><%= port.label @ports[:port_type][i] %>M</td>
 						<td ><%= port.select :port_speed_duplex, options_for_select(@ports[:port_select_options_speed_duplex][i], @ports[:port_speed_duplex][i]) %></td>
+						<td ><%= port.text_field :port_pvid, :value => @ports[:port_pvid][i] %></td>
 				<%end%>
 			<%end%>	
 		</tbody>

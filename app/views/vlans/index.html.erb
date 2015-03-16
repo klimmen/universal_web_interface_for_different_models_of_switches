@@ -22,10 +22,10 @@
         <td class="col-md-2"><%=@vlans[:vlan_name][i]%></td>
         <td class="col-md-1"><%=@vlans[:vlan_port_tag][i]%></td>
         <td class="col-md-2"><%=@vlans[:vlan_port_untag][i]%></td>
-        <td class="col-md-1"></td>
+        <td class="col-md-2"><%=@vlans[:vlan_port_forbidden][i] %></td>
         <td class="col-md-1"><%=@vlans[:vlan_activate][i]%></td>
-        <td class="col-md-2"><%= link_to '', "#", class: "btn-sm btn-primary glyphicon glyphicon-pencil" %>
-        <%= link_to '', "#", method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-sm btn-danger glyphicon glyphicon-remove" %></td>
+        <td class="col-md-2"><%= link_to '', edit_vlan_path(@data[:ip], i), class: "btn-sm btn-primary glyphicon glyphicon-pencil" %>
+        <%= link_to '', vlan_path(@data[:ip],i), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-sm btn-danger glyphicon glyphicon-remove" %></td>
       </tr>
       <%end%>
 			</tbody>

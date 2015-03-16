@@ -43,7 +43,6 @@ class Zte
   def get_port_name
   	oid_names = get_oid("walkPortName")
   	names = Mib.snmp_walk(oid_names, @host, @snmp)
-  	names.map! {|name| name.to_sym}
   end
   
   def get_port_type
@@ -68,8 +67,8 @@ class Zte
   	link_state = Mib.snmp_walk(oid_link_state, @host, @snmp)
   	link_state.map! do |status| 
   		case status
-  			when "1" then	"DOWN"
-  			when "2" then	"UP" 		
+  			when "2" then	"DOWN"
+  			when "1" then	"UP" 		
   		end 	
   	end  	
   end
@@ -86,6 +85,11 @@ class Zte
   	end
     speed_duplex
  	end
+
+  def get_pvid
+    oid_names = get_oid("walkPVID")
+    names = Mib.snmp_walk(oid_names, @host, @snmp)
+  end
 
  ################################ set_ports
 
@@ -106,6 +110,11 @@ class Zte
   def set_port_speed_duplex(port_num, value)
     oid_port_speed_duplex= get_oid("setPortSpeedDuplex")
     Mib.snmp_set_integer("#{oid_port_speed_duplex}.#{port_num}", value, @host, @snmp)
+  end
+
+  def set_port_pvid(pvid, value)
+    oid_port_pvid= get_oid("setPVID")
+    Mib.snmp_set_integer("#{oid_port_pvid}.#{pvid}", value, @host, @snmp)
   end
 
  ################################ get_vlans
@@ -131,7 +140,7 @@ class Zte
     decoder_for_tag_untag(vlan_port_untag)
   end
 
-  def get_port_forbid(vid)
+  def vlan_port_forbidden(vid)
   end
 
   def get_vlan_activate(vid)
