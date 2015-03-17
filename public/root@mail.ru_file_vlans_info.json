@@ -1,0 +1,1 @@
+{"vlan_name":["default","root_22","test33"],"vlan_activate":["yes","yes","yes"],"vlan_port_untag":["1-28","17-20","24"],"vlan_port_tag":["","","23"],"vlan_port_forbidden":["","1-21","22"],"vlan_vid":["1","22","33"]}

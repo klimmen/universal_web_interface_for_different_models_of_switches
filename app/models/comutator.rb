@@ -1,7 +1,6 @@
 class Comutator
   
   require 'json'
-  
   def initialize(switch, user)
 	 @host = switch.ip
 	 @snmp = switch.snmp
@@ -44,7 +43,6 @@ class Comutator
 	  File.open("public/#{@user}_file_switch_info.json", 'w'){ |file| file.write  result.to_json }
     result
   end
-
 end
 
 

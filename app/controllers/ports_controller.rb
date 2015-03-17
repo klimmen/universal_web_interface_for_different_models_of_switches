@@ -18,6 +18,7 @@ class PortsController < ApplicationController
     def set_switch_info
       @subject = Switch.find_by_ip(params[:ip])
       @comutator = Comutator.new(@subject, current_user.email)
+      #@comutator.new_connection
       @port = Port.new(@subject, current_user.email)
     end
 end

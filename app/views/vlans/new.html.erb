@@ -1,0 +1,51 @@
+<h3> New vlan </h3>
+<%= form_for :new_vlan, url: vlans_path(@subject.ip) do |f| %>
+  <p> 
+  	<%= f.label "Active" %>
+  	<%= f.check_box :active,{:checked => true}, true, nil%> 
+  </p>
+  <p>
+   	<%= f.label "pvid: " %>
+    <%= f.text_field :pvid %>
+  </p>
+  <p>
+    <%= f.label "name: " %>
+    <%= f.text_field :name %>
+  </p>
+  <table class="">
+  	<thead>
+    	<tr >
+      	<th>Port</th>
+      	<th>Tagged</th>
+      	<th>Untagged</th>
+      	<th>Forbidden</th>
+      	<th>Not Member</th>
+    	</tr>
+  	</thead>
+  	<tbody> 
+  		<% (1..@ports_count).each do |num_port| %>
+  			<%= f.fields_for "#{num_port}".to_sym do |port|  %>
+  				<tr >
+  					<td class="col-md-1">
+  						<%=num_port%>
+  					</td>
+  					<td class="col-md-2">
+  						<%= port.radio_button(:port_param, "tag") %>
+  					</td>
+  					<td class="col-md-2">
+  						<%= port.radio_button(:port_param, "untag") %>
+  					</td>
+  					<td class="col-md-2">
+  						<%= port.radio_button(:port_param, "forbidden") %>
+  					</td>
+  					<td class="col-md-2">
+  						<%= port.radio_button(:port_param, "not_member", :checked => true) %>
+  					</td>
+  				</tr>
+  			<%end%>
+  		<%end%>
+  	</tbody>
+  </table> 
+  <%= f.submit %>
+
+<% end %>

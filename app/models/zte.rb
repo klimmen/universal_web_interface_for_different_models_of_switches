@@ -191,26 +191,52 @@ class Zte
     output_format_ports(ports)
   end
 
-def output_format_ports (ports_arrey)
-  result_string = ""
-  ports_arrey.each_index do |i|
-    if ports_arrey[i-1] == ports_arrey[i]-1 && ports_arrey[i+1] == ports_arrey[i]+1 
-      result_string.chomp!(",")
-      result_string << "-" if result_string[-1] != "-" 
-    else
-      if ports_arrey.size-1 != i    
-       result_string << "#{ports_arrey[i]},"
-     else
-       result_string << "#{ports_arrey[i]}"
-     end
+  def output_format_ports (ports_arrey)
+    result_string = ""
+    ports_arrey.each_index do |i|
+      if ports_arrey[i-1] == ports_arrey[i]-1 && ports_arrey[i+1] == ports_arrey[i]+1 
+        result_string.chomp!(",")
+        result_string << "-" if result_string[-1] != "-" 
+      else
+        if ports_arrey.size-1 != i    
+          result_string << "#{ports_arrey[i]},"
+        else
+          result_string << "#{ports_arrey[i]}"
+        end
+      end
     end
+    result_string
   end
-  result_string
-end
- ################################ get_vlan
 
+ ################################ telnet
+  def commands_for_destroy_vlan(pass, id, vlans_info)
+    commands  = ["en", pass, "clear vlan #{id} name"]
+    vlans_info[:vlan_vid].each_index do |i|
+      if vlans_info[:vlan_vid][i] == id
+        commands << "set vlan #{id} disable" if !vlans_info[:vlan_activate][i].nil?  
+        commands << "set vlan #{id} delete port #{vlans_info[:vlan_port_untag][i]}" if !vlans_info[:vlan_port_untag][i].nil?
+        commands << "set vlan #{id} delete port #{vlans_info[:vlan_port_tag][i]}" if !vlans_info[:vlan_port_tag][i].nil?
+        commands << "set vlan #{id} permit port #{vlans_info[:vlan_port_untag][i]}" if !vlans_info[:vlan_port_forbidden][i].nil?
+      end
+    end
+    commands
+  end
 
- ################################ set_vlan
-
+  def commands_for_create_vlan(pass, param_vlan)
+    commands = ["en", pass, "create vlan #{param_vlan[:pvid]} name #{param_vlan[:name]}"]
+    commands << "set vlan #{param_vlan[:pvid]} enable" if !param_vlan[:active].nil?
+    result = { tag: "", untag: "", forbidden: ""}
+    (1..get_ports_count).each do |num_port|
+      case param_vlan["#{num_port}".to_sym][:port_param]
+        when "tag" then result[:tag] << "#{num_port},"
+        when "untag" then result[:untag] << "#{num_port},"
+        when "forbidden" then result[:forbidden] << "#{num_port},"
+      end 
+    end
+    commands << "set vlan #{param_vlan[:pvid]} add port #{result[:tag][0..-2]} tag" if !result[:tag].nil?
+    commands << "set vlan #{param_vlan[:pvid]} add port #{result[:untag][0..-2]} untag" if !result[:untag].nil?
+    commands << "set vlan #{param_vlan[:pvid]} forbid port #{result[:forbidden][0..-2]}" if !result[:forbidden].nil?
+  commands
+  end
 
 end

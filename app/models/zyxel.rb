@@ -243,25 +243,46 @@ class Zyxel
     ports
   end
 
-def output_format_ports (ports_arrey)
-  result_string = ""
-  ports_arrey.each_index do |i|
-    if ports_arrey[i-1] == ports_arrey[i]-1 && ports_arrey[i+1] == ports_arrey[i]+1 
-      result_string.chomp!(",")
-      result_string << "-" if result_string[-1] != "-" 
-    else
-      if ports_arrey.size-1 != i    
-       result_string << "#{ports_arrey[i]},"
-     else
-       result_string << "#{ports_arrey[i]}"
-     end
+  def output_format_ports (ports_arrey)
+    result_string = ""
+    ports_arrey.each_index do |i|
+      if ports_arrey[i-1] == ports_arrey[i]-1 && ports_arrey[i+1] == ports_arrey[i]+1 
+        result_string.chomp!(",")
+        result_string << "-" if result_string[-1] != "-" 
+      else
+        if ports_arrey.size-1 != i    
+          result_string << "#{ports_arrey[i]},"
+        else
+          result_string << "#{ports_arrey[i]}"
+        end
+      end
     end
+    result_string
   end
-  result_string
-end
  
- ################################ get_vlan
- 
+  def commands_for_destroy_vlan(pass, id, vlans_info)
+    ["configure", "no vlan #{id}"]
+  end
+  
+  def commands_for_create_vlan(pass, param_vlan)
+    commands =["configure", "vlan #{param_vlan[:pvid]}", "name #{param_vlan[:name]}"]
+    commands << "inactive" if param_vlan[:active].nil?
+    result = { tag: "", untag: "", forbidden: ""}
+    (1..get_ports_count).each do |num_port|
+      case param_vlan["#{num_port}".to_sym][:port_param]
+        when "tag" then result[:tag] << "#{num_port},"
+        when "untag" then result[:untag] << "#{num_port},"
+        when "forbidden" then result[:forbidden] << "#{num_port},"
+      end 
+    end
+    commands << "forbidden #{result[:forbidden][0..-2]}" if !result[:forbidden].nil?
+    commands << "fixed #{result[:untag][0..-2]}" if !result[:untag].nil?
+    commands << "untagged #{result[:untag][0..-2]}" if !result[:untag].nil?
+    commands << "fixed #{result[:tag][0..-2]}" if !result[:tag].nil?
+    commands
+
+
+  end
  ################################ set_vlan
 
 end
