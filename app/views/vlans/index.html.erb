@@ -1,33 +1,34 @@
 <strong><%= @data[:name] %></strong>
-<strong>  <%= @data[:ip] %></strong>
+<strong>ip - <%= @data[:ip] %></strong>
 <strong>model - <%=@data[:model]%></strong> 
 <strong>firmware - <%=@data[:firmware]%></strong>
 <strong>mac - <%=@data[:mac]%></strong> 
-	<table class="table table-bordered table-striped">
-  	<thead>
-    	<tr >
-      	<th>VID</th>
-      	<th>Vlane name</th>
-      	<th>Tag</th>
-      	<th>Untag</th>
-      	<th>Forbiden</th>
-      	<th>Active</th>
-        <th></th>
-    	</tr>
-  	</thead>
-  	<tbody>  	 
-      <% @vlans[:vlan_vid].each_index do |i|%>
+<table class="table table-bordered table-striped">
+ 	<thead>
+   	<tr >
+     	<th>VID</th>
+     	<th>Vlane name</th>
+     	<th>Tag</th>
+     	<th>Untag</th>
+     	<th>Forbiden</th>
+     	<th>Active</th>
+      <th></th>
+   	</tr>
+ 	</thead>
+ 	<tbody>  	 
+    <% @vlans[:vlan_vid].each_index do |i|%>
       <tr >
-	  	  <td class="col-md-1"><%=@vlans[:vlan_vid][i]%></td>
+  	    <td class="col-md-1"><%=@vlans[:vlan_vid][i]%></td>
         <td class="col-md-2"><%=@vlans[:vlan_name][i]%></td>
         <td class="col-md-1"><%=@vlans[:vlan_port_tag][i]%></td>
         <td class="col-md-2"><%=@vlans[:vlan_port_untag][i]%></td>
         <td class="col-md-2"><%=@vlans[:vlan_port_forbidden][i] %></td>
         <td class="col-md-1"><%=@vlans[:vlan_activate][i]%></td>
-        <td class="col-md-2"><%= link_to '', edit_vlan_path(@data[:ip], @vlans[:vlan_vid][i]), class: "btn-sm btn-primary glyphicon glyphicon-pencil" %>
+        <td class="col-md-2"><%= link_to '', edit_vlan_path(@data[:ip], @vlans[:vlan_vid][i]), class: "btn-sm btn-primary glyphicon glyphicon-pencil go_spiner" %>
         <%= link_to '', vlan_path(@data[:ip], @vlans[:vlan_vid][i]), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-sm btn-danger glyphicon glyphicon-remove" %></td>
       </tr>
-      <%end%>
-			</tbody>
-	</table>
-	 <%= link_to 'Add vlan', new_vlan_path(@data[:ip]), class: "btn btn-primary" %></td>
+    <%end%>
+  </tbody>
+</table>
+
+<%= link_to 'Add vlan', new_vlan_path(@data[:ip]), class: "btn btn-primary go_spiner" %></td>

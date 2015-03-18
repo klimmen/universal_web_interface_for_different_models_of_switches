@@ -8,10 +8,14 @@ class VlansController < ApplicationController
   end
 
   def new
+    @pvid = @vlan.pvid
     @ports_count = @vlan.ports_count
   end
 
   def edit
+    @ports_count = @vlan.ports_count
+    @pvid = @vlan.pvid
+    @edit_vlan= @vlan.edit_vlan(params[:id])
   end
 
   def create
@@ -20,6 +24,8 @@ class VlansController < ApplicationController
   end
 
   def update
+    @vlan.update_vlan(params[:id], params[:edit_vlan])
+    redirect_to vlans_path(@subject.ip)
   end
 
   def destroy

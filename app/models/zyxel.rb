@@ -1,11 +1,13 @@
 class Zyxel
+include TelnetClient
 
-
-	def initialize(host, snmp, model = nil, firmware = nil)
+	def initialize(host, snmp, model = nil, firmware = nil, login = nil, pass = nil)
 		@host = host
 		@snmp = snmp
 		@model = model
 		@firmware = firmware
+    @login = login
+    @pass = pass
   end
 
 	def get_firmware(model)
@@ -138,6 +140,7 @@ class Zyxel
   end
 
 ################################ get_vlans
+
   def get_vid
     oid_vid = get_oid("walkVlanID")
     vlan_vid = Mib.snmp_walk(oid_vid, @host, @snmp)
@@ -149,39 +152,47 @@ class Zyxel
   end
 
   def get_port_tag(vid)
-    oid_ports_untag = get_oid("getPortsUntag")
-    vlan_port_untag = Mib.snmp_get("#{oid_ports_untag}.#{vid}", @host, @snmp)
-    result = ""
-    vlan_port_untag.inspect.scan /x(..)/ do |groups_arr|
-      result << groups_arr[0]
-    end 
-    ports = decoder_for_tag_untag(result.split(""))
-    all_ports = (1..get_ports_count).collect {|i| i}
-    ports = vlan_port_fixed(vid) - ports
-    output_format_ports(ports)
+    commands =["show vlan #{vid}", " "]
+    log =  new_connection(@host,@login, @pass, commands)
+    ports = log.scan(/\d+(?=             Tagged)/)
+    ports.map! {|port| port.to_i}
+    #oid_ports_untag = get_oid("getPortsUntag")
+    #vlan_port_untag = Mib.snmp_get("#{oid_ports_untag}.#{vid}", @host, @snmp)
+    #result = ""
+    #vlan_port_untag.inspect.scan /x(..)/ do |groups_arr|
+    #  result << groups_arr[0]
+    #end 
+    #ports = decoder_for_tag_untag(result.split(""))
+    #all_ports = (1..get_ports_count).collect {|i| i}
+    #ports = vlan_port_fixed(vid) - ports
+    #output_format_ports(ports)
   end
 
   def get_port_untag(vid)
-    oid_ports_untag = get_oid("getPortsUntag")
-    vlan_port_untag = Mib.snmp_get("#{oid_ports_untag}.#{vid}", @host, @snmp)
-    result = ""
-    vlan_port_untag.inspect.scan /x(..)/ do |groups_arr|
-      result << groups_arr[0]
-    end
-    ports = decoder_for_tag_untag(result.split(""))
-    ports = vlan_port_fixed(vid) & ports
-    output_format_ports(ports)
+    commands =["show vlan #{vid}", " "]
+    log =  new_connection(@host,@login, @pass, commands)
+    ports = log.scan(/\d+(?=             Untagged)/)
+    ports.map! {|port| port.to_i}
+    #oid_ports_untag = get_oid("getPortsUntag")
+    #vlan_port_untag = Mib.snmp_get("#{oid_ports_untag}.#{vid}", @host, @snmp)
+    #result = ""
+    #vlan_port_untag.inspect.scan /x(..)/ do |groups_arr|
+    #  result << groups_arr[0]
+    #end
+    #ports = decoder_for_tag_untag(result.split(""))
+    #ports = vlan_port_fixed(vid) & ports
+    #output_format_ports(ports)
   end
 
-  def vlan_port_fixed(vid)
-    oid_vlan_ports_fixed = get_oid("getVlanPortsFixed")
-    vlan_ports_fixed = Mib.snmp_get("#{oid_vlan_ports_fixed}.#{vid}", @host, @snmp)
-    result = ""
-    vlan_ports_fixed.inspect.scan /x(..)/ do |groups_arr|
-      result << groups_arr[0]
-    end
-    ports = decoder_for_tag_untag(result.split(""))
-  end
+  #def vlan_port_fixed(vid)
+  #  oid_vlan_ports_fixed = get_oid("getVlanPortsFixed")
+  #  vlan_ports_fixed = Mib.snmp_get("#{oid_vlan_ports_fixed}.#{vid}", @host, @snmp)
+  #  result = ""
+  #  vlan_ports_fixed.inspect.scan /x(..)/ do |groups_arr|
+  #    result << groups_arr[0]
+  #  end
+  #  ports = decoder_for_tag_untag(result.split(""))
+  #end
 
   def vlan_port_forbidden(vid)
     oid_vlan_ports_forbidden = get_oid("getVlanPortsForbidden")
@@ -191,7 +202,6 @@ class Zyxel
       result << groups_arr[0]
     end
     ports = decoder_for_tag_untag(result.split(""))
-    output_format_ports(ports)
   end
 
 
@@ -243,28 +253,11 @@ class Zyxel
     ports
   end
 
-  def output_format_ports (ports_arrey)
-    result_string = ""
-    ports_arrey.each_index do |i|
-      if ports_arrey[i-1] == ports_arrey[i]-1 && ports_arrey[i+1] == ports_arrey[i]+1 
-        result_string.chomp!(",")
-        result_string << "-" if result_string[-1] != "-" 
-      else
-        if ports_arrey.size-1 != i    
-          result_string << "#{ports_arrey[i]},"
-        else
-          result_string << "#{ports_arrey[i]}"
-        end
-      end
-    end
-    result_string
-  end
- 
   def commands_for_destroy_vlan(pass, id, vlans_info)
     ["configure", "no vlan #{id}"]
   end
   
-  def commands_for_create_vlan(pass, param_vlan)
+  def commands_for_create_update_vlan(pass, param_vlan)
     commands =["configure", "vlan #{param_vlan[:pvid]}", "name #{param_vlan[:name]}"]
     commands << "inactive" if param_vlan[:active].nil?
     result = { tag: "", untag: "", forbidden: ""}
@@ -279,10 +272,29 @@ class Zyxel
     commands << "fixed #{result[:untag][0..-2]}" if !result[:untag].nil?
     commands << "untagged #{result[:untag][0..-2]}" if !result[:untag].nil?
     commands << "fixed #{result[:tag][0..-2]}" if !result[:tag].nil?
+    commands << "no untagged #{result[:tag][0..-2]}" if !result[:tag].nil?
     commands
-
-
   end
+
+  def commands_for_update_vlan(pass, pvid, param_vlan)
+    commands =["configure", "vlan #{pvid}", "name #{param_vlan[:name]}"]
+    commands << "inactive" if param_vlan[:active].nil?
+    result = { tag: "", untag: "", forbidden: ""}
+    (1..get_ports_count).each do |num_port|
+      case param_vlan["#{num_port}".to_sym][:port_param]
+        when "tag" then result[:tag] << "#{num_port},"
+        when "untag" then result[:untag] << "#{num_port},"
+        when "forbidden" then result[:forbidden] << "#{num_port},"
+      end 
+    end
+    commands << "forbidden #{result[:forbidden][0..-2]}" if !result[:forbidden].nil?
+    commands << "fixed #{result[:untag][0..-2]}" if !result[:untag].nil?
+    commands << "untagged #{result[:untag][0..-2]}" if !result[:untag].nil?
+    commands << "fixed #{result[:tag][0..-2]}" if !result[:tag].nil?
+    commands << "no untagged #{result[:tag][0..-2]}" if !result[:tag].nil?
+    commands
+  end
+
  ################################ set_vlan
 
 end

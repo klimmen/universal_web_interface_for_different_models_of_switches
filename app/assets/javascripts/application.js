@@ -27,7 +27,11 @@
 $(document).on("page:change",function(){
   $('.go_spiner').click(function(){
     displayDate()
- })   
+  })   
+
+  $("input[name='all_ports']").click(function(){
+    GetSelectedItem()
+  })
 })
 
 function displayDate(){    
@@ -51,3 +55,19 @@ function displayDate(){
   target = document.getElementById('spinnerContainer');
   spinner = new Spinner(opts).spin(target);    
 } 
+
+
+function GetSelectedItem() {
+  chosen = ""
+  for (i = 0; i <document.getElementsByName("all_ports").length; i++) {
+    if (document.getElementsByName("all_ports")[i].checked) {
+      chosen = document.getElementsByName("all_ports")[i].value
+    }
+  }
+
+  for (i = 0; i <document.getElementsByClassName("radio_button").length; i++) {
+    if (document.getElementsByClassName("radio_button")[i].value == chosen){
+      document.getElementsByClassName("radio_button")[i].checked = true
+    }
+  }
+}

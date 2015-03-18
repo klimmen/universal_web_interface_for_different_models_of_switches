@@ -20,7 +20,7 @@
         <td class="col-md-2"><%= switch.ip %></td>
         <td class="col-md-2"><%= link_to 'information switsh', ip_path(switch.ip), class: "btn-sm btn-primary " %></td>
         <td class="col-md-2"><%= link_to 'Ports', ports_path(switch.ip), class: "btn-sm btn-primary go_spiner " %></td>
-        <td class="col-md-2"><%= link_to 'Vlans', vlans_path(switch.ip), class: "btn-sm btn-primary " %></td>
+        <td class="col-md-2"><%= link_to 'Vlans', vlans_path(switch.ip), class: "btn-sm btn-primary go_spiner" %></td>
         <td class="col-md-2"><%= link_to '', switch, class: "btn-sm btn-primary glyphicon glyphicon-eye-open" %>
         <%= link_to '', edit_switch_path(switch), class: "btn-sm btn-primary glyphicon glyphicon-pencil" %>
         <%= link_to '', switch, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-sm btn-danger glyphicon glyphicon-remove" %></td>
