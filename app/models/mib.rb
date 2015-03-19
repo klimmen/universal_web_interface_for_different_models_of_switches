@@ -4,6 +4,7 @@ class Mib < ActiveRecord::Base
     has_many :firmwares, through: :firmware_mibs
 
 
+
  def self.snmp_get(oid, host, community)
   
    	get_value = ''

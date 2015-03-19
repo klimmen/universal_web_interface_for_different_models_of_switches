@@ -32,7 +32,10 @@ $(document).on("page:change",function(){
   $("input[name='all_ports']").click(function(){
     GetSelectedItem()
   })
-})
+  $("input[name='all_pvids']").keyup(function(){
+     GetSelectedItemPVIDS(this.value)
+    }) 
+  })
 
 function displayDate(){    
   var opts = {
@@ -69,5 +72,11 @@ function GetSelectedItem() {
     if (document.getElementsByClassName("radio_button")[i].value == chosen){
       document.getElementsByClassName("radio_button")[i].checked = true
     }
+  }
+}
+
+function GetSelectedItemPVIDS(input_string){
+  for (i = 0; i <document.getElementsByClassName("input_fild").length; i++){
+    document.getElementsByClassName("input_fild")[i].value = input_string
   }
 }

@@ -152,56 +152,34 @@ include TelnetClient
   end
 
   def get_port_tag(vid)
-    commands =["show vlan #{vid}", " "]
-    log =  new_connection(@host,@login, @pass, commands)
-    ports = log.scan(/\d+(?=             Tagged)/)
-    ports.map! {|port| port.to_i}
-    #oid_ports_untag = get_oid("getPortsUntag")
-    #vlan_port_untag = Mib.snmp_get("#{oid_ports_untag}.#{vid}", @host, @snmp)
-    #result = ""
-    #vlan_port_untag.inspect.scan /x(..)/ do |groups_arr|
-    #  result << groups_arr[0]
-    #end 
-    #ports = decoder_for_tag_untag(result.split(""))
-    #all_ports = (1..get_ports_count).collect {|i| i}
-    #ports = vlan_port_fixed(vid) - ports
-    #output_format_ports(ports)
+    oid_ports_untag = get_oid("getPortsUntag")
+    vlan_port_untag = Mib.snmp_get("#{oid_ports_untag}.#{vid}", @host, @snmp)
+    result = vlan_port_untag.unpack("H2H2H2H2H2H2H2H2").join.split("")
+    ports = decoder_for_tag_untag(result)
+    all_ports = (1..get_ports_count).collect {|i| i}
+    ports = vlan_port_fixed(vid) - ports
   end
 
   def get_port_untag(vid)
-    commands =["show vlan #{vid}", " "]
-    log =  new_connection(@host,@login, @pass, commands)
-    ports = log.scan(/\d+(?=             Untagged)/)
-    ports.map! {|port| port.to_i}
-    #oid_ports_untag = get_oid("getPortsUntag")
-    #vlan_port_untag = Mib.snmp_get("#{oid_ports_untag}.#{vid}", @host, @snmp)
-    #result = ""
-    #vlan_port_untag.inspect.scan /x(..)/ do |groups_arr|
-    #  result << groups_arr[0]
-    #end
-    #ports = decoder_for_tag_untag(result.split(""))
-    #ports = vlan_port_fixed(vid) & ports
-    #output_format_ports(ports)
+    oid_ports_untag = get_oid("getPortsUntag")
+    vlan_port_untag = Mib.snmp_get("#{oid_ports_untag}.#{vid}", @host, @snmp)
+    result = vlan_port_untag.unpack("H2H2H2H2H2H2H2H2").join.split("")
+    ports = decoder_for_tag_untag(result)
+    ports = vlan_port_fixed(vid) & ports
   end
 
-  #def vlan_port_fixed(vid)
-  #  oid_vlan_ports_fixed = get_oid("getVlanPortsFixed")
-  #  vlan_ports_fixed = Mib.snmp_get("#{oid_vlan_ports_fixed}.#{vid}", @host, @snmp)
-  #  result = ""
-  #  vlan_ports_fixed.inspect.scan /x(..)/ do |groups_arr|
-  #    result << groups_arr[0]
-  #  end
-  #  ports = decoder_for_tag_untag(result.split(""))
-  #end
+  def vlan_port_fixed(vid)
+    oid_vlan_ports_fixed = get_oid("getVlanPortsFixed")
+    vlan_ports_fixed = Mib.snmp_get("#{oid_vlan_ports_fixed}.#{vid}", @host, @snmp)
+    result = vlan_ports_fixed.unpack("H2H2H2H2H2H2H2H2").join.split("")
+    ports = decoder_for_tag_untag(result)
+  end
 
   def vlan_port_forbidden(vid)
     oid_vlan_ports_forbidden = get_oid("getVlanPortsForbidden")
     vlan_ports_forbidden = Mib.snmp_get("#{oid_vlan_ports_forbidden}.#{vid}", @host, @snmp)
-    result = ""
-    vlan_ports_forbidden.inspect.scan /x(..)/ do |groups_arr|
-      result << groups_arr[0]
-    end
-    ports = decoder_for_tag_untag(result.split(""))
+    result = vlan_ports_forbidden.unpack("H2H2H2H2H2H2H2H2").join.split("")
+    ports = decoder_for_tag_untag(result)
   end
 
 
