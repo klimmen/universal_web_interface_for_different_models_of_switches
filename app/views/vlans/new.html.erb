@@ -6,7 +6,7 @@
   </p>
   <p>
    	<%= f.label "VID: " %>
-    <%= f.text_field :pvid %>
+    <%= f.text_field :vid %>
   </p>
   <p>
     <%= f.label "Name: " %>
@@ -51,7 +51,7 @@
   						<%= port.radio_button(:port_param, "not_member", :class=> "radio_button", :checked => true) %>
   					</td>
             <td class="col-md-1">
-              <%= f.text_field :pvid, value: @pvid[num_port-1], class: "input_fild" %>
+              <%= port.text_field :pvid, value: @pvid[num_port-1], class: "input_fild" %>
             </td>
   				</tr>
   			<%end%>

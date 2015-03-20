@@ -1,4 +1,5 @@
 class Zte
+  include TelnetClient
 
 	def initialize(host, snmp, model = nil, firmware = nil, login = nil, pass = nil)
 		@host = host
@@ -142,9 +143,7 @@ class Zte
     decoder_for_tag_untag(vlan_port_untag)
   end
 
-  def vlan_port_forbidden(vid)
-    []
-  end
+
 
   def get_vlan_activate(vid)
     oid_vlan_active = get_oid("getVlanActive")
@@ -194,9 +193,34 @@ class Zte
     ports
   end
 
- ################################ telnet
-  def commands_for_destroy_vlan(pass, id, vlans_info)
-    commands  = ["en", pass, "clear vlan #{id} name"]
+
+  def input_format_ports (ports_string)
+    ports_arrey =  ports_string.split(",")
+    ports = []
+    ports_arrey.each do |port_arrey|
+      if !port_arrey.slice("-").nil?
+        block_ports  = port_arrey.scan(/\d+/)
+        (block_ports[0]..block_ports[1]).each { |ii| ports << ii.to_i}
+      else
+        ports << port_arrey.to_i
+      end
+    end
+    ports
+  end
+
+ ################################ TELNET COMMANDS
+
+
+  def vlan_port_forbidden(vid)
+     commands  = ["en", @pass, "show vlan #{vid}"]
+     log = new_connection(@host,@login, @pass, commands)
+     result = "#{log.slice(/(?<=Forbidden ports : )[\d,\-]+/)}"
+     input_format_ports (result)
+  end
+
+  def commands_for_destroy_vlan(id, vlans_info)
+        p vlans_info
+    commands  = ["en", @pass, "clear vlan #{id} name"]
     vlans_info[:vlan_vid].each_index do |i|
       if vlans_info[:vlan_vid][i] == id
         commands << "set vlan #{id} disable" if !vlans_info[:vlan_activate][i].nil?  
@@ -205,12 +229,13 @@ class Zte
         commands << "set vlan #{id} permit port #{vlans_info[:vlan_port_untag][i]}" if !vlans_info[:vlan_port_forbidden][i].nil?
       end
     end
+    p commands
     commands
   end
 
-  def commands_for_create_update_vlan(pass, param_vlan)
-    commands = ["en", pass, "create vlan #{param_vlan[:pvid]} name #{param_vlan[:name]}", "set vlan #{param_vlan[:pvid]} name #{param_vlan[:name]}"]
-    commands << "set vlan #{param_vlan[:pvid]} enable" if !param_vlan[:active].nil?
+  def commands_for_create_update_vlan(param_vlan)
+    commands = ["en", @pass, "create vlan #{param_vlan[:vid]} name #{param_vlan[:name]}"]
+    commands << "set vlan #{param_vlan[:vid]} enable" if !param_vlan[:active].nil?
     result = { tag: "", untag: "", forbidden: ""}
     (1..get_ports_count).each do |num_port|
       case param_vlan["#{num_port}".to_sym][:port_param]
@@ -219,26 +244,11 @@ class Zte
         when "forbidden" then result[:forbidden] << "#{num_port},"
       end 
     end
-    commands << "set vlan #{param_vlan[:pvid]} add port #{result[:tag][0..-2]} tag" if !result[:tag].nil?
-    commands << "set vlan #{param_vlan[:pvid]} add port #{result[:untag][0..-2]} untag" if !result[:untag].nil?
-    commands << "set vlan #{param_vlan[:pvid]} forbid port #{result[:forbidden][0..-2]}" if !result[:forbidden].nil?
+    commands << "set vlan #{param_vlan[:vid]} add port #{result[:tag][0..-2]} tag" if !result[:tag].nil?
+    commands << "set vlan #{param_vlan[:vid]} add port #{result[:untag][0..-2]} untag" if !result[:untag].nil?
+    commands << "set vlan #{param_vlan[:vid]} forbid port #{result[:forbidden][0..-2]}" if !result[:forbidden].nil?
     commands
   end
 
-  def commands_for_update_vlan(pass, pvid, param_vlan)
-    commands = ["en", pass, "set vlan #{pvid} name #{param_vlan[:name]}"]
-    commands << "set vlan #{pvid} enable" if !param_vlan[:active].nil?
-    result = { tag: "", untag: "", forbidden: ""}
-    (1..get_ports_count).each do |num_port|
-      case param_vlan["#{num_port}".to_sym][:port_param]
-        when "tag" then result[:tag] << "#{num_port},"
-        when "untag" then result[:untag] << "#{num_port},"
-        when "forbidden" then result[:forbidden] << "#{num_port},"
-      end 
-    end
-    commands << "set vlan #{pvid} add port #{result[:tag][0..-2]} tag" if !result[:tag].nil?
-    commands << "set vlan #{pvid} add port #{result[:untag][0..-2]} untag" if !result[:untag].nil?
-    commands << "set vlan #{pvid} forbid port #{result[:forbidden][0..-2]}" if !result[:forbidden].nil?
-    commands
-  end
+ 
 end

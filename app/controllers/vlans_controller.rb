@@ -14,7 +14,6 @@ class VlansController < ApplicationController
 
   def edit
     @ports_count = @vlan.ports_count
-    @pvid = @vlan.pvid
     @edit_vlan= @vlan.edit_vlan(params[:id])
   end
 

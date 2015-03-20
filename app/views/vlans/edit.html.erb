@@ -1,7 +1,8 @@
 <h3> Edit vlan </h3>
 <%= form_for :edit_vlan, url: vlan_path(@subject.ip,@edit_vlan[:vid]), method:"PATCH" do |f| %>
   <p>
-    <%= f.label "vlan id: #{@edit_vlan[:vid]}" %>
+    <%= f.label "Vlan id: #{@edit_vlan[:vid]}" %>
+    <%= f.hidden_field :vid, value: @edit_vlan[:vid] %>
   </p>
   <p> 
   	<%= f.label "Active" %>
@@ -25,10 +26,11 @@
   	<tbody>
       <tr>
         <td class="col-md-1"><strong>All</strong></td>
-        <td class="col-md-2"><%= radio_button_tag 'all_ports', "tag"%></td>
-        <td class="col-md-2"><%= radio_button_tag 'all_ports', "untag"%></td>
-        <td class="col-md-2"><%= radio_button_tag 'all_ports', "forbidden"%></td>
-        <td class="col-md-2"><%= radio_button_tag 'all_ports', "not_member"%></td>
+        <td class="col-md-1"><%= radio_button_tag 'all_ports', "tag"%></td>
+        <td class="col-md-1"><%= radio_button_tag 'all_ports', "untag"%></td>
+        <td class="col-md-1"><%= radio_button_tag 'all_ports', "forbidden"%></td>
+        <td class="col-md-1"><%= radio_button_tag 'all_ports', "not_member"%></td>
+        <td class="col-md-1"><%= text_field_tag 'all_pvids'%></td>
       </tr> 
   		<% (1..@ports_count).each do |num_port| %>
   			<%= f.fields_for "#{num_port}".to_sym do |port|  %>
@@ -36,20 +38,20 @@
   					<td class="col-md-1">
   						<%=num_port%>
   					</td>
-  					<td class="col-md-2">
+  					<td class="col-md-1">
   						<%= port.radio_button(:port_param, "tag", :class=> "radio_button", :checked => @edit_vlan[:tag].include?(num_port))%>
   					</td>
-  					<td class="col-md-2">
+  					<td class="col-md-1">
   						<%= port.radio_button(:port_param, "untag", :class=> "radio_button", :checked => @edit_vlan[:untag].include?(num_port)) %>
   					</td>
-  					<td class="col-md-2">
+  					<td class="col-md-1">
   						<%= port.radio_button(:port_param, "forbidden", :class=> "radio_button", :checked => @edit_vlan[:forbidden].include?(num_port)) %>
   					</td>
-  					<td class="col-md-2">
+  					<td class="col-md-1">
   						<%= port.radio_button(:port_param, "not_member", :class=> "radio_button", :checked => ( !@edit_vlan[:tag].include?(num_port) && !@edit_vlan[:untag].include?(num_port) && !@edit_vlan[:forbidden].include?(num_port) )) %>
   					</td>
-            <td class="col-md-2">
-              <%= f.text_field :pvid, value: @pvid[num_port-1] %>
+            <td class="col-md-1">
+              <%= port.text_field :pvid, value: @edit_vlan[:pvid][num_port-1], :class=> "input_fild" %>
             </td>
   				</tr>
   			<%end%>

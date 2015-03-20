@@ -24,7 +24,7 @@ UWIFS designed to control the switches from different manufacturers and modle th
  1. Derivation of general information about the device
    * Derivation information (device model, frameware version, uptime device, device MAC address, device IP address)
    * Ports informations (status up/down, ports uptime, ports descriptions, speed 10/100/1000Mbit/s, bandwidth limits on ports, macaddress limits on ports)
-   * Vlans informations (vlans names, vlaevice Configurationns ID, vlans configuration for ports)
+   * Vlans informations (vlans names, vlans Configurationns ID, vlans configuration for ports)
    * Others etc. 
  2. Device configuration
    * Ports configuration (up/down, set port description, set port speed, set bandwidth on port, set maclimit on port)

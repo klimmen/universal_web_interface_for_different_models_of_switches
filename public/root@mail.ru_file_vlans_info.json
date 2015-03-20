@@ -1,1 +1,1 @@
-{"vlan_name":["default","root_22","test","test44"],"vlan_activate":["yes","yes","yes","yes"],"vlan_port_untag":["1-28","23","7-10,17-21",""],"vlan_port_tag":["","22,24-28","1-6,22-28","8"],"vlan_port_forbidden":["","1-21","11-16",""],"vlan_vid":["1","22","33","44"]}
+{"vlan_name":[" NULL ","root_22","TEST_VLAN"],"vlan_activate":["yes","yes","yes"],"vlan_port_untag":["1-52","51","29-52"],"vlan_port_tag":["","49,50,52","1-28"],"vlan_port_forbidden":["","","4,25-31"],"vlan_vid":["1","22","998"]}

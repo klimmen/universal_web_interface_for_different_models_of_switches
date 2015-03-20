@@ -133,10 +133,10 @@ include TelnetClient
     oid_port_speed_duplex= get_oid("setPortSpeedDuplex")
     Mib.snmp_set_integer("#{oid_port_speed_duplex}.#{port_num}", value, @host, @snmp)
   end
-
-  def set_port_pvid(pvid, value)
+################ pvid
+  def set_port_pvid(port, value)
     oid_port_pvid= get_oid("setPVID")
-    Mib.snmp_set_integer("#{oid_port_pvid}.#{pvid}", value, @host, @snmp)
+    Mib.snmp_set_integer("#{oid_port_pvid}.#{port}", value, @host, @snmp)
   end
 
 ################################ get_vlans
@@ -231,12 +231,14 @@ include TelnetClient
     ports
   end
 
+###################################### TELNET COMMANDS
+
   def commands_for_destroy_vlan(pass, id, vlans_info)
     ["configure", "no vlan #{id}"]
   end
   
   def commands_for_create_update_vlan(pass, param_vlan)
-    commands =["configure", "vlan #{param_vlan[:pvid]}", "name #{param_vlan[:name]}"]
+    commands =["configure", "vlan #{param_vlan[:vid]}", "name #{param_vlan[:name]}"]
     commands << "inactive" if param_vlan[:active].nil?
     result = { tag: "", untag: "", forbidden: ""}
     (1..get_ports_count).each do |num_port|
@@ -254,24 +256,7 @@ include TelnetClient
     commands
   end
 
-  def commands_for_update_vlan(pass, pvid, param_vlan)
-    commands =["configure", "vlan #{pvid}", "name #{param_vlan[:name]}"]
-    commands << "inactive" if param_vlan[:active].nil?
-    result = { tag: "", untag: "", forbidden: ""}
-    (1..get_ports_count).each do |num_port|
-      case param_vlan["#{num_port}".to_sym][:port_param]
-        when "tag" then result[:tag] << "#{num_port},"
-        when "untag" then result[:untag] << "#{num_port},"
-        when "forbidden" then result[:forbidden] << "#{num_port},"
-      end 
-    end
-    commands << "forbidden #{result[:forbidden][0..-2]}" if !result[:forbidden].nil?
-    commands << "fixed #{result[:untag][0..-2]}" if !result[:untag].nil?
-    commands << "untagged #{result[:untag][0..-2]}" if !result[:untag].nil?
-    commands << "fixed #{result[:tag][0..-2]}" if !result[:tag].nil?
-    commands << "no untagged #{result[:tag][0..-2]}" if !result[:tag].nil?
-    commands
-  end
+ 
 
  ################################ set_vlan
 

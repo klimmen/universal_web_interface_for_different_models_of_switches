@@ -33,11 +33,11 @@ class Port
   	port_name = []
   	port_speed_duplex = []
     port_pvid = []
- 		ports_info_from_view.each do |port|
-			port_admin_status << port[1]["port_status"]
-  		port_name << port[1]["port_name"]
-  		port_speed_duplex << port[1]["port_speed_duplex"]
-      port_pvid << port[1]["port_pvid"]
+ 		ports_info_from_view.each do |key, value|
+			port_admin_status << value["port_status"]
+  		port_name << value["port_name"]
+  		port_speed_duplex << value["port_speed_duplex"]
+      port_pvid << value["port_pvid"]
  		end
   	file = File.read("public/#{@user}_file_ports_info.json")
     ports_info_from_file = JSON.parse(file, {:symbolize_names => true})
