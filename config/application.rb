@@ -4,6 +4,7 @@ require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
+
 Bundler.require(*Rails.groups)
 
 module UniversalWebInterfaceForDifferentModelsOfSwitches
@@ -23,5 +24,11 @@ module UniversalWebInterfaceForDifferentModelsOfSwitches
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
+  
+     config.generators do |g|
+      g.test_framework :rspec
+      g.fixture_replacement :factory_girl, dir: "spec/factories"
+    end
   end
+
 end

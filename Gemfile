@@ -31,7 +31,6 @@ gem 'spinjs-rails'
 gem 'simple_form'
 gem 'bootstrap_form'
 
-
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -50,6 +49,12 @@ group :development, :test do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+  gem "rspec"
+  gem "rspec-rails"
+  gem 'factory_girl_rails'
+  gem "shoulda-matchers"
+  gem "database_cleaner"
 end
 
 gem 'bootstrap-sass'
