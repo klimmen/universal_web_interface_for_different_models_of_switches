@@ -1,15 +1,4 @@
-// This is a manifest file that'll be compiled into application.js, which will include all the files
-// listed below.
-//
-// Any JavaScript/Coffee file within this directory, lib/assets/javascripts, vendor/assets/javascripts,
-// or any plugin's vendor/assets/javascripts directory can be referenced here using a relative path.
-//
-// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
-// compiled file.
-//
-// Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
-// about supported directives.
-//
+
 //= require jquery
 //= require bootstrap-sprockets
 //= require bootstrap-select
@@ -18,12 +7,7 @@
 //= require spin
 //= require_tree .
 
-//$(document).ready(function(){
-//$('.selectpicker').selectpicker({
-//      style: 'btn-info',
-//      size: 1
-//  });
-//});
+
 $(document).on("page:change",function(){
   $('.go_spiner').click(function(){
     displayDate()
@@ -32,10 +16,20 @@ $(document).on("page:change",function(){
   $("input[name='all_ports']").click(function(){
     GetSelectedItem()
   })
+
   $("input[name='all_pvids']").keyup(function(){
      GetSelectedItemPVIDS(this.value)
-    }) 
+  }) 
+
+  $(':radio').click(function(){
+    SetPvidForUntagVlan()
   })
+
+  $('.search_type').click(function(){
+    TextFieldState()
+  })
+
+})
 
 function displayDate(){    
   var opts = {
@@ -78,5 +72,28 @@ function GetSelectedItem() {
 function GetSelectedItemPVIDS(input_string){
   for (i = 0; i <document.getElementsByClassName("input_fild").length; i++){
     document.getElementsByClassName("input_fild")[i].value = input_string
+  }
+}
+
+function SetPvidForUntagVlan() {
+  for (i = 0; i <document.getElementsByClassName('radio_button').length; i++) {
+    if (document.getElementsByClassName('radio_button')[i].checked) {
+      if (document.getElementsByClassName('radio_button')[i].value == "untag") {
+        var num_port = /\d+/.exec(document.getElementsByClassName('radio_button')[i].id)
+        document.getElementById("pvid_"+num_port).value = document.getElementById('vid').value
+      }
+    }
+  }
+}
+
+function TextFieldState() {
+  for (i = 0; i <document.getElementsByClassName('search_type').length; i++) {
+    if (document.getElementsByClassName('search_type')[i].checked) {
+      if (document.getElementsByClassName('search_type')[i].value == "all") {
+        $('#search_value').prop('disabled', true);
+      } else {
+        $('#search_value').prop('disabled', false);
+      }
+    }
   }
 }

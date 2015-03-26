@@ -207,7 +207,56 @@ class Zte
     end
     ports
   end
-
+ ################################ walk mac-table
+  
+  def search_all_mac
+    oid_mac_table = get_oid("walkPortMac")
+    walk_all_data = Mib.snmp_walk_all_data(oid_mac_table, @host, @snmp)
+    walk_all_data[:vlan] =[]
+    walk_all_data[:mac] = []
+    walk_all_data[:oid].each do |walk_data|
+      walk_all_data[:vlan] << walk_data[-7].to_i
+      walk_all_data[:mac] << walk_data[-6..-1].map! {|mac| mac.to_i.to_s(16)}
+    end
+    walk_all_data[:mac].map! do |mac|
+      mac.map! do |piece_mac|
+        if piece_mac.length == 1 
+          piece_mac = "0#{piece_mac}" 
+        else
+          piece_mac
+        end
+      end
+    end
+    result = []
+    walk_all_data[:value].each_index do |i|
+      result << [walk_all_data[:mac][i].join(":"),walk_all_data[:vlan][i], walk_all_data[:value][i]]
+    end
+    result
+  end
+ 
+ def search_mac(mac)
+  result = []
+  search_all_mac.each do |mac_data|
+    result <<mac_data if mac_data[0] == mac
+  end
+  result
+ end
+ 
+ def search_mac_for_vid(vid)
+  result = []
+  search_all_mac.each do |mac_data|
+    result << mac_data if mac_data[1] == vid.to_i
+  end
+  result
+ end
+ 
+ def search_mac_for_port(port)
+  result = []
+  search_all_mac.each do |mac_data|
+    result << mac_data if mac_data[2] == port
+  end
+  result
+ end
  ################################ TELNET COMMANDS
 
 

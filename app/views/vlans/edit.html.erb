@@ -2,7 +2,7 @@
 <%= form_for :edit_vlan, url: vlan_path(@subject.ip,@edit_vlan[:vid]), method:"PATCH" do |f| %>
   <p>
     <%= f.label "Vlan id: #{@edit_vlan[:vid]}" %>
-    <%= f.hidden_field :vid, value: @edit_vlan[:vid] %>
+    <%= f.hidden_field :vid, value: @edit_vlan[:vid], id: "vid" %>
   </p>
   <p> 
   	<%= f.label "Active" %>
@@ -51,7 +51,7 @@
   						<%= port.radio_button(:port_param, "not_member", :class=> "radio_button", :checked => ( !@edit_vlan[:tag].include?(num_port) && !@edit_vlan[:untag].include?(num_port) && !@edit_vlan[:forbidden].include?(num_port) )) %>
   					</td>
             <td class="col-md-1">
-              <%= port.text_field :pvid, value: @edit_vlan[:pvid][num_port-1], :class=> "input_fild" %>
+              <%= port.text_field :pvid, value: @edit_vlan[:pvid][num_port-1], :class=> "input_fild", id: "pvid_#{num_port}" %>
             </td>
   				</tr>
   			<%end%>

@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'mac_tables/index'
+
   resources :value_oids
 
   devise_for :users
@@ -18,13 +20,13 @@ Rails.application.routes.draw do
       post 'update_ports', on: :collection
     end
     resources :vlans, only: [:index, :new, :edit, :create, :update, :destroy]
+    resources :mac_tables, only: [:index] do
+      post 'search', on: :collection
+    end
   end
   
-  get ':ip' => 'switches#information_about_switch', as: "ip", constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ }
-  #get ':ip/ports' => 'switches#ports', as: "ports", constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ }
-  #get ':ip/vlans' => 'switches#vlans', as: "vlans", constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ }
-  #post ':ip/ports' => 'switches#update_ports', constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ }
-                                        
+  get ':ip' => 'switches#information_about_switch', as: "ip", constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ }                                      
+  
   root 'welcome#index'
 
 

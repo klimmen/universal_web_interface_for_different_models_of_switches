@@ -1,0 +1,36 @@
+<strong><%= @data[:name] %></strong>
+<strong>ip - <%= @data[:ip] %></strong>
+<strong>model - <%=@data[:model]%></strong> 
+<strong>firmware - <%=@data[:firmware]%></strong>
+<strong>mac - <%=@data[:mac]%></strong> 
+<h3>MacTable</h3>
+ <%= form_for :search_param, url: search_mac_tables_path(@subject.ip), remote: true do |f|  %>
+ <%= f.radio_button(:search_type, "port", class: "search_type", checked: true)%>
+ <%= f.label "Port" %>
+ <%= f.radio_button(:search_type, "vid", class: "search_type")%>
+ <%= f.label "VID" %>
+ <%= f.radio_button(:search_type, "mac", class: "search_type")%>
+ <%= f.label "MAC" %>
+ <%= f.radio_button(:search_type, "all", class: "search_type")%>
+ <%= f.label "All" %>
+<p>
+<%= f.text_field :search_value, id: "search_value" %>
+</p>
+<p>
+ <%= f.submit 'Search', :class => 'btn btn-primary go_spiner'%>
+ </p>
+ <%end%>
+
+
+ <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th >MAC Address</th>
+      <th >VID</th>
+      <th >Port</th>
+    </tr>
+  </thead>
+
+  <tbody  <tbody id="task-mac-data">
+  </tbody>
+</table>

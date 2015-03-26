@@ -48,7 +48,7 @@ class Vlan
 
   def create_vlan(param_vlan)
     switch_class = check_model   
-    commands = switch_class.commands_for_create_update_vlan(@pass, param_vlan)
+    commands = switch_class.commands_for_create_update_vlan(param_vlan)
     new_connection(@host, @login, @pass, commands)
   end
 

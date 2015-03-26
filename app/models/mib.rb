@@ -14,16 +14,15 @@ class Mib < ActiveRecord::Base
       get_value = vb.value
     end
    end
-   get_value
-   
+   get_value   
  end
 
   def self.snmp_walk(oid, host, community)
   	walk_values = []
 		SNMP::Manager.open(:host => host, :community => community) do |manager|
-  	manager.walk(oid) do |vb| 
-  	walk_values<<vb.value.to_s
-  		end
+  	 manager.walk(oid) do |vb| 
+  	   walk_values<<vb.value.to_s
+  	 end
 		end
     walk_values
   end
@@ -41,5 +40,16 @@ class Mib < ActiveRecord::Base
     manager.set(varbind)
     manager.close
   end
-  
+
+  def self.snmp_walk_all_data(oid, host, community)
+    result= {oid:[],value:[]}
+    SNMP::Manager.open(:host => host, :community => community) do |manager|
+      manager.walk(oid) do |vb| 
+        result[:oid]<<vb.name.to_s.split(".")
+        result[:value]<<vb.value.to_s
+      end
+    end
+    result
+  end
+
 end

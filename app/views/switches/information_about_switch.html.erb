@@ -4,6 +4,7 @@
 <strong>, firmware - </strong><strong id="switch_firmware"><%=@data[:firmware]%></strong>
 <strong>, mac - </strong><strong id="switch_mac"><%=@data[:mac]%></strong> 
 <div>
-<%= link_to 'Ports', ports_path(@subject.ip), class: "btn-sm btn-info " %>
-<%= link_to 'Vlans', vlans_path(@subject.ip), class: "btn-sm btn-info " %>
+<%= link_to 'Ports', ports_path(@subject.ip), class: "btn btn-primary " %>
+<%= link_to 'Vlans', vlans_path(@subject.ip), class: "btn btn-primary " %>
+<%= link_to 'MAC Table', mac_tables_path(@subject.ip), class: "btn btn-primary " %>
 </div>

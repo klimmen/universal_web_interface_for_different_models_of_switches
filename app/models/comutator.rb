@@ -2,6 +2,7 @@ class Comutator
   
   require 'json'
   def initialize(switch, user)
+	 @switch_name = switch.name
 	 @host = switch.ip
 	 @snmp = switch.snmp
 	 @user = user

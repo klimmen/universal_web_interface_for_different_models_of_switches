@@ -1,0 +1,11 @@
+<% if !@mac_tables.blank? %>
+	<%= @mac_tables.each do |mac| %>
+		<tr>
+  		<td><%=mac[0]%></td>
+  		<td><%=mac[1]%></td>
+  		<td><%=mac[2]%></td>
+		</tr>
+	<%end%>
+<%else%>
+ <td colspan="3"><h4> empty</h4></td>	
+<%end%>
