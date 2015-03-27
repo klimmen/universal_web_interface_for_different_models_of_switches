@@ -11,7 +11,6 @@ class UsersController < ApplicationController
 
 	def index
 		@subjects = User.all
-		@roles = Role.all
 	end
 
 
@@ -21,6 +20,7 @@ class UsersController < ApplicationController
 
 	def update
 		@subject = User.find(user_params[:id])
+    @subject.roles
 		@subject.remove_role @subject.roles.first.name if !@subject.roles.blank? 
 		@subject.add_role user_params[:name]
 		flash[:notice] = "Successfully ."

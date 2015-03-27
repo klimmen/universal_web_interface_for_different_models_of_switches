@@ -6,10 +6,12 @@ factory :user do
 
 
   factory :admin do
+  	  email "admin@test.com"
       after(:create) {|user| user.add_role(:admin)}
   end
 
   factory :manager do
+  	  email "manager@test.com"
       after(:create) {|user| user.add_role(:manager)}
   end
  end

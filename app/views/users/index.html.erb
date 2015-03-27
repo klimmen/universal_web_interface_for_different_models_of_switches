@@ -21,7 +21,7 @@
             <% end %></td>
         <td>
           <%= form_for :role, url: user_path(user), method: "put" do |f| %>
-            <%= f.select :user_role, options_for_select(@roles.collect { |c| [c.name, c.name] }), {}, { :class => 'selectpicker '}%>
+            <%= f.select :user_role, options_for_select([["admin", "admin"], ["manager", "manager"]]), {}, { :class => 'selectpicker '}%>
            <%= f.submit %>
           <% end %>
         </td>     
