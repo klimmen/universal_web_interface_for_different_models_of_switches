@@ -6,15 +6,14 @@ class Mib < ActiveRecord::Base
 
 
  def self.snmp_get(oid, host, community)
-  
-   	get_value = ''
-    SNMP::Manager.open(:host => host, :community => community ) do |manager|
+  get_value = ''
+  SNMP::Manager.open(:host => host, :community => community ) do |manager|
     response = manager.get(oid)
     response.each_varbind do |vb|
       get_value = vb.value
     end
-   end
-   get_value   
+  end
+  get_value
  end
 
   def self.snmp_walk(oid, host, community)

@@ -2,7 +2,7 @@ class SwitchesController < ApplicationController
 
 include Finder
 CURRENT_CLASS = Switch
-
+  rescue_from SNMP::RequestTimeout, with: :snmp_timeout
   load_and_authorize_resource
 
   before_filter(only: [:show, :edit, :update, :destroy]) {set_curent_class(CURRENT_CLASS)}
@@ -53,12 +53,12 @@ CURRENT_CLASS = Switch
   def destroy
     @subject.destroy
     respond_to do |format|
-      format.html { redirect_to switches_url, notice: 'Switch was successfully destroyed.' }
+      format.html { redirect_to switches_url,  :flash => { :success => 'Switch was successfully destroyed.'} }
     end
   end
 
   def information_about_switch
-    @data = @comutator.check_switch_info
+      @data = @comutator.check_switch_info
   end
 
   private
@@ -72,5 +72,10 @@ CURRENT_CLASS = Switch
     # Never trust parameters from the scary internet, only allow the white list through.
     def switch_params
       params.require(:switch).permit(:name, :ip, :login, :pass, :snmp)
+    end
+
+    def snmp_timeout
+      flash[:danger] = "Switch is not available"
+      redirect_to switches_url
     end
 end

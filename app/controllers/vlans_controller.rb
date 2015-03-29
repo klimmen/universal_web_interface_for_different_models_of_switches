@@ -1,5 +1,5 @@
 class VlansController < ApplicationController
-  
+  rescue_from SNMP::RequestTimeout, with: :snmp_timeout
   #load_and_authorize_resource
 	before_action :set_switch_info
 
@@ -41,4 +41,8 @@ class VlansController < ApplicationController
       @vlan = Vlan.new(@subject, current_user.email, @data)
     end
 
+    def snmp_timeout
+      flash[:danger] = "Switch is not available"
+      redirect_to switches_url
+    end
 end

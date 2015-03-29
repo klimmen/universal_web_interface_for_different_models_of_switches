@@ -30,7 +30,7 @@ class Comutator
 
   def switch_info
 		model = Mib.snmp_get("1.3.6.1.2.1.1.1.0", @host,@snmp).to_s
-		if model.slice(/ZTE/)
+    if model.slice(/ZTE/)
 			zte = Zte.new(@host, @snmp)
 			firmware =  zte.get_firmware(model)
 			model = model.slice(/.+(?=,)/)
