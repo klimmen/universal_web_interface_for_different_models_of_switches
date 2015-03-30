@@ -20,6 +20,7 @@ include Finder
 
   # POST /firmwares
   def create
+    
     @subject = Firmware.new(firmware_params)
     @subject.mibs << Firmware.find(params[:clone_firmware][:firmware_id]).mibs if !params[:clone_firmware][:firmware_id].blank?
     respond_to do |format|

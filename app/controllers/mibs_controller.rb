@@ -24,6 +24,7 @@ class MibsController < ApplicationController
 
   # POST /mibs
   def create
+
     @subject = Mib.new(mib_params)
     @firmware = Firmware.find(params[:firmware_id])
     @firmware.mibs << @mib

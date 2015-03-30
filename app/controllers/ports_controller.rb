@@ -1,6 +1,7 @@
 class PortsController < ApplicationController
   rescue_from SNMP::RequestTimeout, with: :snmp_timeout
-	#load_and_authorize_resource
+  
+	load_and_authorize_resource
 	before_action :set_switch_info, only: [ :index, :update_ports]
   
   def index

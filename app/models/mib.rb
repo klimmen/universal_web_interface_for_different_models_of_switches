@@ -3,7 +3,7 @@ class Mib < ActiveRecord::Base
     has_many :firmware_mibs
     has_many :firmwares, through: :firmware_mibs
 
-
+    validates :name, presence: true
 
  def self.snmp_get(oid, host, community)
 
