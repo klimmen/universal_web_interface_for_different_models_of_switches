@@ -17,9 +17,14 @@
     <%= f.label :name %><br>
     <%= f.text_field :name %>
   </div>
+  <%=label_tag "Clone mibs for firmware:"%>
+    <div class="field">
+    <%= select("clone_firmware", "firmware_id",@firmwares.collect {|firmware| [ firmware.name, firmware.id ] }, {:include_blank => '==None=='}) %>
+      </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>
 <% end %>
 
-<%= link_to 'Back', switch_models_path %>
+<%= link_to 'Back', switch_models_path, class: "btn-sm btn-info " %>

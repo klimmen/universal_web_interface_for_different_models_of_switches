@@ -260,7 +260,7 @@ include TelnetClient
  def search_mac(mac)
   result = []
   search_all_mac.each do |mac_data|
-    result <<mac_data if mac_data[0] == mac
+    result << mac_data if mac_data[0] == mac
   end
   result
  end

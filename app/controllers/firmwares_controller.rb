@@ -11,6 +11,7 @@ include Finder
   # GET /firmwares/new
   def new
     @subject = Firmware.new
+    @firmwares = SwitchModel.find(params[:switch_model_id]).firmwares
   end
 
   # GET /firmwares/1/edit
@@ -20,6 +21,7 @@ include Finder
   # POST /firmwares
   def create
     @subject = Firmware.new(firmware_params)
+    @subject.mibs << Firmware.find(params[:clone_firmware][:firmware_id]).mibs if !params[:clone_firmware][:firmware_id].blank?
     respond_to do |format|
       if @subject.save
         format.html { redirect_to switch_models_url, notice: 'Firmware was successfully created.' }

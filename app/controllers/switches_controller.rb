@@ -53,7 +53,7 @@ CURRENT_CLASS = Switch
   def destroy
     @subject.destroy
     respond_to do |format|
-      format.html { redirect_to switches_url,  :flash => { :success => 'Switch was successfully destroyed.'} }
+      format.html { redirect_to switches_url,  notice: 'Switch was successfully destroyed.' }
     end
   end
 

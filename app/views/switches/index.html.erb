@@ -1,6 +1,7 @@
-<% flash.each do |key, value| %>
-    <p class="alert alert-<%= key %>"><%= value %></p>
-<% end %>
+<p id="notice"><%= notice %></p>
+<%if !flash[:danger].nil? %>
+    <p class="alert alert-danger"><%= flash[:danger] %></p>
+<%end%>
 <h1>Listing Switches</h1>
 
 <table class="table table-bordered table-striped">
