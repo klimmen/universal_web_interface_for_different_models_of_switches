@@ -5,7 +5,7 @@ class MibsController < ApplicationController
   load_and_authorize_resource
 
   before_filter(only: [ :edit, :update, :destroy]) {set_curent_class(CURRENT_CLASS)}
-  before_action :set_value_oids, only: [:new, :edit]
+  before_action :set_value_oids, only: [:new, :edit, :create]
 
   # GET /mibs
   def index
@@ -27,10 +27,10 @@ class MibsController < ApplicationController
 
     @subject = Mib.new(mib_params)
     @firmware = Firmware.find(params[:firmware_id])
-    @firmware.mibs << @mib
+    @subject.firmwares << @firmware
     respond_to do |format|
-     if @firmware.save
-        format.html { redirect_to switch_model_firmware_mibs_path(params[:switch_model_id], params[:firmware_id], @mib), notice: 'Mib was successfully created.' }
+     if @subject.save
+        format.html { redirect_to switch_model_firmware_mibs_path(params[:switch_model_id], params[:firmware_id], @subject), notice: 'Mib was successfully created.' }
       else
         format.html { render :new }
       end
@@ -41,7 +41,7 @@ class MibsController < ApplicationController
   def update
     respond_to do |format|
       if @subject.update(mib_params)
-        format.html { redirect_to switch_model_firmware_mibs_path(params[:switch_model_id], params[:firmware_id], @mib), notice: 'Mib was successfully updated.' }
+        format.html { redirect_to switch_model_firmware_mibs_path(params[:switch_model_id], params[:firmware_id], @subject), notice: 'Mib was successfully updated.' }
       else
         format.html { render :edit }
       end

@@ -16,7 +16,7 @@
       <tr>
         <td class="col-md-3"><%= switch_model.name %> </td>
         <td class="col-md-2">  
-          <%= link_to 'edit', edit_switch_model_path(switch_model), class: "btn-sm btn-info glyphicon glyphicon-pencil"  %>
+          <%= link_to 'edit', edit_switch_model_path(switch_model), class: "btn-sm btn-primary glyphicon glyphicon-pencil"  %>
           <%= link_to '', switch_model, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-sm btn-danger glyphicon glyphicon-remove" %>
         </td>  
         <td >
@@ -25,15 +25,15 @@
               <tr>
                 <td class="col-md-2"><%=  firmware.name%></td>
                 <td>
-                  <%= link_to 'Mibs', switch_model_firmware_mibs_path(switch_model,firmware), class: "btn-sm btn-info glyphicon glyphicon-eye-open"  %>
-                  <%= link_to 'edit', edit_switch_model_firmware_path(switch_model,firmware), class: "btn-sm btn-info glyphicon glyphicon-pencil"%>
+                  <%= link_to 'Mibs', switch_model_firmware_mibs_path(switch_model,firmware), class: "btn-sm btn-primary glyphicon glyphicon-eye-open"  %>
+                  <%= link_to 'edit', edit_switch_model_firmware_path(switch_model,firmware), class: "btn-sm btn-primary glyphicon glyphicon-pencil"%>
                   <%= link_to '', [switch_model,firmware], method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-sm btn-danger glyphicon glyphicon-remove" %>
                 </td>
               </tr>
             <% end %>
           <tr >
            <td colspan="2">
-          <%= link_to '', new_switch_model_firmware_path(switch_model), class: "btn-sm btn-info glyphicon glyphicon-plus"  %>
+          <%= link_to '', new_switch_model_firmware_path(switch_model), class: "btn-sm btn-primary glyphicon glyphicon-plus"  %>
           </td>
           </tr>
           </table>
@@ -44,4 +44,4 @@
 </table>
 <br>
 
-<%= link_to 'New Switch model', new_switch_model_path, class: "btn btn-info" %>
+<%= link_to 'New Switch model', new_switch_model_path, class: "btn btn-primary" %>

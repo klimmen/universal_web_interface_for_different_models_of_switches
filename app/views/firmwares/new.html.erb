@@ -1,6 +1,6 @@
 <h1>New Firmware</h1>
 
-<%= form_for([:switch_model, @subject]) do |f| %>
+<%= bootstrap_form_for([:switch_model, @subject]) do |f| %>
   <% if @subject.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@subject.errors.count, "error") %> prohibited this firmware from being saved:</h2>
@@ -13,18 +13,18 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :name %><br>
+  <div class="field stand_width">
     <%= f.text_field :name %>
   </div>
   <%=label_tag "Clone mibs for firmware:"%>
     <div class="field">
-    <%= select("clone_firmware", "firmware_id",@firmwares.collect {|firmware| [ firmware.name, firmware.id ] }, {:include_blank => '==None=='}) %>
+    <%= select("clone_firmware", "firmware_id",@firmwares.collect {|firmware| [ firmware.name, firmware.id ] }, {:include_blank => '==None=='}, { :class => ' form-control field stand_width'}) %>
       </div>
 
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit :class =>"btn btn-primary "%>
+    <%= link_to 'Back', switch_models_path, :class =>"btn btn-primary" %>
   </div>
 <% end %>
 
-<%= link_to 'Back', switch_models_path, class: "btn-sm btn-info " %>
+

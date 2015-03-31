@@ -15,7 +15,7 @@
       <tr>
         <td><%= value_oid.name %></td>
         <td>
-        <%= link_to 'Edit', edit_value_oid_path(value_oid), class: "btn-sm btn-info glyphicon glyphicon-pencil" %>
+        <%= link_to 'Edit', edit_value_oid_path(value_oid), class: "btn-sm btn-primary  glyphicon glyphicon-pencil" %>
        <%= link_to '', value_oid, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-sm btn-danger glyphicon glyphicon-remove" %></td>
       </tr>
     <% end %>
@@ -24,4 +24,4 @@
 
 <br>
 
-<%= link_to 'New Value oid', new_value_oid_path, class: "btn btn-info" %>
+<%= link_to 'New Value oid', new_value_oid_path, class: "btn btn-primary" %>
