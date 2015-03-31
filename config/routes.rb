@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  get 'mac_tables/index'
 
   resources :value_oids
 
