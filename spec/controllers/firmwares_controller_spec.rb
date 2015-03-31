@@ -16,7 +16,7 @@ describe FirmwaresController do
       expect(response).to render_template('new')
  	    end
 
-       it "assign a new frimeware to subject" do
+      it "assign a new frimeware to subject" do
       get :new, :switch_model_id => @model.id
       expect(assigns(:subject)).to be_a_new(Firmware)
      end 
@@ -26,16 +26,23 @@ describe FirmwaresController do
 
       it "creates a new firmware" do
       expect{
-      post :create, firmware: {name: "V4.02"}, switch_model_id: @model.id}.to change(Firmware,:count).by(1)
+      post :create, firmware: {name: "V4.02"}, clone_firmware: { firmware_id: "" }, switch_model_id: @model.id}.to change(Firmware,:count).by(1)
+      end
+	
+      it "creates a new firmware through cloning" do
+      firmware_old = create(:firmware) 
+      firmware_old.mibs << create(:mib)
+      post :create, firmware: {name: "V4.03"}, clone_firmware: { firmware_id: firmware_old.id }, switch_model_id: @model.id
+      assigns(:subject).mibs.should eq firmware_old.mibs
       end
    
       it "redirects to swithc model index if valodations pass" do
-      post :create, firmware: {name: "V4.02"}, switch_model_id: @model.id
+      post :create, firmware: {name: "V4.02"}, clone_firmware: { firmware_id: "" }, switch_model_id: @model.id
       expect(response).to redirect_to(switch_models_path)
       end
 
       it "renders new page again if valodations fail" do
-      post :create, firmware: {name: nil}, switch_model_id: @model.id
+      post :create, firmware: {name: nil}, clone_firmware: { firmware_id: "" }, switch_model_id: @model.id
       expect(response).to render_template(:new)
       end
     end
