@@ -1,5 +1,6 @@
 class Zyxel
 include TelnetClient
+include SnmpClient
 
 	def initialize(host, snmp, model = nil, firmware = nil, login = nil, pass = nil)
 		@host = host
@@ -22,7 +23,7 @@ include TelnetClient
 
 		rusult_value_oids.each do |rusult_value_oid|
 		oid = firmware.mibs.find_by_value_oid_id(rusult_value_oid.id).name
-			rusult_firmware << Mib.snmp_get(oid, @host, @snmp).to_s
+			rusult_firmware << snmp_get(oid, @host, @snmp).to_s
 		end
 		rusult_firmware	
 	end
@@ -30,7 +31,7 @@ include TelnetClient
 	def get_mac(model, firmware)
 		value_oid = ValueOid.find_by_name("getSwitchMAC")
 		oid = SwitchModel.find_by_name(model).firmwares.find_by_name(firmware).mibs.find_by_value_oid_id(value_oid.id).name
-		mac = Mib.snmp_get(oid, @host, @snmp).to_s.unpack("H2H2H2H2H2H2H2H2H2H2H2").join(":").slice(/(?<=80:00:03:7a:03:).+/)
+		mac = snmp_get(oid, @host, @snmp).to_s.unpack("H2H2H2H2H2H2H2H2H2H2H2").join(":").slice(/(?<=80:00:03:7a:03:).+/)
 	end
   
   def get_oid(value_oid_name)
@@ -42,13 +43,13 @@ include TelnetClient
 
   def get_ports_count
     oid_ports_count =  get_oid("getPortsCount")
-    ports_count = Mib.snmp_get(oid_ports_count, @host, @snmp).to_i
+    ports_count = snmp_get(oid_ports_count, @host, @snmp).to_i
   end
 
 	def get_port_admin_status
   	oid_admin_status = get_oid("walkAdminStatus")
   	ports_count = get_ports_count
-  	admin_status = Mib.snmp_walk(oid_admin_status, @host, @snmp)
+  	admin_status = snmp_walk(oid_admin_status, @host, @snmp)
   	admin_status = admin_status[0..(ports_count-1)]	
   	admin_status.map! do |status|
       case status
@@ -60,13 +61,13 @@ include TelnetClient
   
   def get_port_name
   	oid_names = get_oid("walkPortName")
-  	names = Mib.snmp_walk(oid_names, @host, @snmp)
+  	names = snmp_walk(oid_names, @host, @snmp)
   	names.map! {|name| name.to_sym}
   end
   
   def get_port_type
   	oid_type = get_oid("walkPortType")
-  	type = Mib.snmp_walk(oid_type, @host, @snmp)
+  	type = snmp_walk(oid_type, @host, @snmp)
 
 
   	type.map! do |status| 
@@ -79,12 +80,12 @@ include TelnetClient
   
   def get_port_speed_duplex
   	oid_speed_duplex= get_oid("walkPortSpeedDuplex")
-  	speed_duplex = Mib.snmp_walk(oid_speed_duplex, @host, @snmp)
+  	speed_duplex = snmp_walk(oid_speed_duplex, @host, @snmp)
   end
 
   def get_link_state
   	oid_link_state= get_oid("walkLinkState")
-  	link_state = Mib.snmp_walk(oid_link_state, @host, @snmp)
+  	link_state = snmp_walk(oid_link_state, @host, @snmp)
   	link_state.map! do |status| 
   		case status
   			when "0" then "DOWN"
@@ -110,7 +111,7 @@ include TelnetClient
 
   def get_pvid
     oid_names = get_oid("walkPVID")
-    names = Mib.snmp_walk(oid_names, @host, @snmp)
+    names = snmp_walk(oid_names, @host, @snmp)
   end
 
  ################################ set_ports
@@ -143,17 +144,17 @@ include TelnetClient
 
   def get_vid
     oid_vid = get_oid("walkVlanID")
-    vlan_vid = Mib.snmp_walk(oid_vid, @host, @snmp)
+    vlan_vid = snmp_walk(oid_vid, @host, @snmp)
   end
 
   def get_vlan_name(vid)
     oid_vlan_name = get_oid("getVlanName")
-    vlan_name = Mib.snmp_get("#{oid_vlan_name}.#{vid}", @host, @snmp).to_s
+    vlan_name = snmp_get("#{oid_vlan_name}.#{vid}", @host, @snmp).to_s
   end
 
   def get_port_tag(vid)
     oid_ports_untag = get_oid("getPortsUntag")
-    vlan_port_untag = Mib.snmp_get("#{oid_ports_untag}.#{vid}", @host, @snmp)
+    vlan_port_untag = snmp_get("#{oid_ports_untag}.#{vid}", @host, @snmp)
     result = vlan_port_untag.unpack("H2H2H2H2H2H2H2H2").join.split("")
     ports = decoder_for_tag_untag(result)
     all_ports = (1..get_ports_count).collect {|i| i}
@@ -162,7 +163,7 @@ include TelnetClient
 
   def get_port_untag(vid)
     oid_ports_untag = get_oid("getPortsUntag")
-    vlan_port_untag = Mib.snmp_get("#{oid_ports_untag}.#{vid}", @host, @snmp)
+    vlan_port_untag = snmp_get("#{oid_ports_untag}.#{vid}", @host, @snmp)
     result = vlan_port_untag.unpack("H2H2H2H2H2H2H2H2").join.split("")
     ports = decoder_for_tag_untag(result)
     ports = vlan_port_fixed(vid) & ports
@@ -170,14 +171,14 @@ include TelnetClient
 
   def vlan_port_fixed(vid)
     oid_vlan_ports_fixed = get_oid("getVlanPortsFixed")
-    vlan_ports_fixed = Mib.snmp_get("#{oid_vlan_ports_fixed}.#{vid}", @host, @snmp)
+    vlan_ports_fixed = snmp_get("#{oid_vlan_ports_fixed}.#{vid}", @host, @snmp)
     result = vlan_ports_fixed.unpack("H2H2H2H2H2H2H2H2").join.split("")
     ports = decoder_for_tag_untag(result)
   end
 
   def vlan_port_forbidden(vid)
     oid_vlan_ports_forbidden = get_oid("getVlanPortsForbidden")
-    vlan_ports_forbidden = Mib.snmp_get("#{oid_vlan_ports_forbidden}.#{vid}", @host, @snmp)
+    vlan_ports_forbidden = snmp_get("#{oid_vlan_ports_forbidden}.#{vid}", @host, @snmp)
     result = vlan_ports_forbidden.unpack("H2H2H2H2H2H2H2H2").join.split("")
     ports = decoder_for_tag_untag(result)
   end
@@ -185,7 +186,7 @@ include TelnetClient
 
   def get_vlan_activate(vid)
     oid_vlan_active = get_oid("getVlanActive")
-    vlan_activate = Mib.snmp_get("#{oid_vlan_active}.#{vid}", @host, @snmp).to_i
+    vlan_activate = snmp_get("#{oid_vlan_active}.#{vid}", @host, @snmp).to_i
     case vlan_activate
       when 1 then vlan_activate = "yes"
       when 2 then vlan_activate = "no"    
@@ -234,7 +235,7 @@ include TelnetClient
  
   def search_all_mac
     oid_mac_table = get_oid("walkPortMac")
-    walk_all_data = Mib.snmp_walk_all_data(oid_mac_table, @host, @snmp)
+    walk_all_data = snmp_walk_all_data(oid_mac_table, @host, @snmp)
     walk_all_data[:vlan] =[]
     walk_all_data[:mac] = []
     walk_all_data[:oid].each do |walk_data|

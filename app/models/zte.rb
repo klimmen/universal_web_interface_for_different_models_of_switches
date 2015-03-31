@@ -1,5 +1,6 @@
 class Zte
   include TelnetClient
+  include SnmpClient
 
 	def initialize(host, snmp, model = nil, firmware = nil, login = nil, pass = nil)
 		@host = host
@@ -17,7 +18,7 @@ class Zte
 	def get_mac(model, firmware)
 		value_oid = ValueOid.find_by_name("getSwitchMAC")
 		result_mib = SwitchModel.find_by_name(model).firmwares.find_by_name(firmware).mibs.find_by_value_oid_id(value_oid.id)
-		mac = Mib.snmp_get(result_mib.name, @host, @snmp).unpack("H2H2H2H2H2H2").join(":")
+		mac = snmp_get(result_mib.name, @host, @snmp).unpack("H2H2H2H2H2H2").join(":")
 	end
 
 	def get_oid(value_oid_name)
@@ -29,12 +30,12 @@ class Zte
 	
 	def get_ports_count
     oid_ports_count =  get_oid("getPortsCount")
-    ports_count = Mib.snmp_get(oid_ports_count, @host, @snmp).to_i
+    ports_count = snmp_get(oid_ports_count, @host, @snmp).to_i
   end
 
   def get_port_admin_status
   	oid_admin_status = get_oid("walkAdminStatus")
-  	admin_status = Mib.snmp_walk(oid_admin_status, @host, @snmp)
+  	admin_status =snmp_walk(oid_admin_status, @host, @snmp)
   	admin_status.map! do |status| 
       case status
         when "1" then "up"
@@ -45,12 +46,12 @@ class Zte
   
   def get_port_name
   	oid_names = get_oid("walkPortName")
-  	names = Mib.snmp_walk(oid_names, @host, @snmp)
+  	names =snmp_walk(oid_names, @host, @snmp)
   end
   
   def get_port_type
   	oid_type = get_oid("walkPortType")
-  	type = Mib.snmp_walk(oid_type, @host, @snmp)
+  	type = snmp_walk(oid_type, @host, @snmp)
   	type.map! do |status| 
   		if !status.slice("ZXR10 2952-SI 1000Base").blank? 
   			1000 
@@ -62,12 +63,12 @@ class Zte
   
   def get_port_speed_duplex
   	oid_speed_duplex= get_oid("walkPortSpeedDuplex")
-  	speed_duplex = Mib.snmp_walk(oid_speed_duplex, @host, @snmp)
+  	speed_duplex =snmp_walk(oid_speed_duplex, @host, @snmp)
   end
 
   def get_link_state
   	oid_link_state= get_oid("walkLinkState")
-  	link_state = Mib.snmp_walk(oid_link_state, @host, @snmp)
+  	link_state = snmp_walk(oid_link_state, @host, @snmp)
   	link_state.map! do |status| 
   		case status
   			when "2" then	"DOWN"
@@ -91,7 +92,7 @@ class Zte
 
   def get_pvid
     oid_names = get_oid("walkPVID")
-    names = Mib.snmp_walk(oid_names, @host, @snmp)
+    names = snmp_walk(oid_names, @host, @snmp)
   end
 
  ################################ set_ports
@@ -102,44 +103,44 @@ class Zte
       when "up" then num = 1
       when "down" then num = 2   
     end 
-    Mib.snmp_set_integer("#{oid_admin_status}.#{port_num}", num, @host, @snmp) 
+    snmp_set_integer("#{oid_admin_status}.#{port_num}", num, @host, @snmp)
   end
 
   def set_port_name(port_num, value)
     oid_port_name= get_oid("setPortName")
-    Mib.snmp_set_string("#{oid_port_name}.#{port_num}", value, @host, @snmp)
+    snmp_set_string("#{oid_port_name}.#{port_num}", value, @host, @snmp)
   end
 
   def set_port_speed_duplex(port_num, value)
     oid_port_speed_duplex= get_oid("setPortSpeedDuplex")
-    Mib.snmp_set_integer("#{oid_port_speed_duplex}.#{port_num}", value, @host, @snmp)
+    snmp_set_integer("#{oid_port_speed_duplex}.#{port_num}", value, @host, @snmp)
   end
 
   def set_port_pvid(pvid, value)
     oid_port_pvid= get_oid("setPVID")
-    Mib.snmp_set_integer("#{oid_port_pvid}.#{pvid}", value, @host, @snmp)
+    snmp_set_integer("#{oid_port_pvid}.#{pvid}", value, @host, @snmp)
   end
 
  ################################ get_vlans
   def get_vid
     oid_vid = get_oid("walkVlanID")
-    vlan_vid = Mib.snmp_walk(oid_vid, @host, @snmp)
+    vlan_vid = snmp_walk(oid_vid, @host, @snmp)
   end
 
   def get_vlan_name(vid)
     oid_vlan_name = get_oid("getVlanName")
-    vlan_name = Mib.snmp_get("#{oid_vlan_name}.#{vid}", @host, @snmp).to_s
+    vlan_name = snmp_get("#{oid_vlan_name}.#{vid}", @host, @snmp).to_s
   end
 
   def get_port_tag(vid)
     oid_ports_tag = get_oid("getPortsTag")
-    vlan_port_tag = Mib.snmp_get("#{oid_ports_tag}.#{vid}", @host, @snmp).to_s.split("")
+    vlan_port_tag = snmp_get("#{oid_ports_tag}.#{vid}", @host, @snmp).to_s.split("")
     decoder_for_tag_untag(vlan_port_tag)
   end
 
   def get_port_untag(vid)
     oid_ports_untag = get_oid("getPortsUntag")
-    vlan_port_untag = Mib.snmp_get("#{oid_ports_untag}.#{vid}", @host, @snmp).to_s.split("")
+    vlan_port_untag = snmp_get("#{oid_ports_untag}.#{vid}", @host, @snmp).to_s.split("")
     decoder_for_tag_untag(vlan_port_untag)
   end
 
@@ -147,7 +148,7 @@ class Zte
 
   def get_vlan_activate(vid)
     oid_vlan_active = get_oid("getVlanActive")
-    vlan_activate = Mib.snmp_get("#{oid_vlan_active}.#{vid}", @host, @snmp).to_i
+    vlan_activate = snmp_get("#{oid_vlan_active}.#{vid}", @host, @snmp).to_i
     case vlan_activate
       when 1 then vlan_activate = "yes"
       when 2 then vlan_activate = "no"    
@@ -211,7 +212,7 @@ class Zte
   
   def search_all_mac
     oid_mac_table = get_oid("walkPortMac")
-    walk_all_data = Mib.snmp_walk_all_data(oid_mac_table, @host, @snmp)
+    walk_all_data = snmp_walk_all_data(oid_mac_table, @host, @snmp)
     walk_all_data[:vlan] =[]
     walk_all_data[:mac] = []
     walk_all_data[:oid].each do |walk_data|
@@ -237,7 +238,7 @@ class Zte
  def search_mac(mac)
   result = []
   search_all_mac.each do |mac_data|
-    result <<mac_data if mac_data[0] == mac
+    result << mac_data if mac_data[0] == mac
   end
   result
  end

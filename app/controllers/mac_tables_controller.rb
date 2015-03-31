@@ -8,7 +8,6 @@ class MacTablesController < ApplicationController
   def search
   	@mac_tables = @mac_table.search_mac(params[:search_param])
   	respond_to do |format|
-      format.html { redirect_to mac_tables_path(@subject.ip), notice: 'User was successfully created.' }
       format.js   {}
       format.json { render json: @mac_tables , status: :ok, location: mac_tables_path(@subject.ip) }
   	end

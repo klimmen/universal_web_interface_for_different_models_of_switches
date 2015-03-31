@@ -1,5 +1,5 @@
 class Comutator
-  
+  include SnmpClient
   require 'json'
   def initialize(switch, user)
 	 @switch_name = switch.name
@@ -29,7 +29,7 @@ class Comutator
   end
 
   def switch_info
-		model = Mib.snmp_get("1.3.6.1.2.1.1.1.0", @host,@snmp).to_s
+		model =snmp_get("1.3.6.1.2.1.1.1.0", @host,@snmp).to_s
     if model.slice(/ZTE/)
 			zte = Zte.new(@host, @snmp)
 			firmware =  zte.get_firmware(model)
