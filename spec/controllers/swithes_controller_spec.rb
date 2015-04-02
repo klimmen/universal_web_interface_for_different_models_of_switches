@@ -12,12 +12,22 @@ describe SwitchesController do
  
   it_renders_404_page_if_switch_was_not_found :show, :edit, :update, :destroy
 
+    describe "information_about_switch " do
+
+      it "renders the :information_about_switch view" do
+        get :information_about_switch, ip: "172.24.24.240"
+        expect(response).to render_template('information_about_switch')
+      end
+    end
+
+
     describe "index switches" do
 
       it "show a list of all switches" do
       get :index
-      assigns(:switches).should eq([@switch])
+      assigns(:switches).should eq(Switch.all)
       end
+
 
       it "renders the :index view" do
       get :index
@@ -77,7 +87,8 @@ describe SwitchesController do
       end
 
       it "renders edit page again if valodations fail" do
-      put :update, id: @user.id, switch: {id: "1", name: "swithc", ip: nil, login: "admin", pass: "password", snmp: "q1w2e3"}    
+
+      put :update, id: @user.id, switch: {name: "sdsdsad", ip: "", logi: "nadmin", pass: "dsdasd", snmp: "sdasdas"}, id: 1
       expect(response).to render_template('edit')
       end
 

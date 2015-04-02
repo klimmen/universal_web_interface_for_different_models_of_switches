@@ -14,7 +14,7 @@ describe SwitchModelsController do
 
       it "show a list of all switch models" do
       get :index
-      assigns(:subjects).should eq([@model])
+      assigns(:subjects).should eq(SwitchModel.all)
       end
 
       it "renders the :index view" do

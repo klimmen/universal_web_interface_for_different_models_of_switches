@@ -13,7 +13,7 @@ describe UsersController do
 	describe "index switches" do
 		it "show a list of all users" do
     get :index
-    assigns(:users).should eq([@admin])
+    assigns(:users).should eq(User.all)
     end
 	
 		it "renders the :index view" do

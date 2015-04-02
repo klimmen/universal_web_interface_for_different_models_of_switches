@@ -14,6 +14,7 @@ factory :user do
   	  email "manager@test.com"
       after(:create) {|user| user.add_role(:manager)}
   end
+
  end
 
 end

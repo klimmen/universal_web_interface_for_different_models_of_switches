@@ -15,13 +15,15 @@ RSpec.configure do |config|
   config.include ControllerMacros, type: :controller
   config.include FactoryGirl::Syntax::Methods
   config.before(:suite) do
-   DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.strategy = :transaction
   end
+
   config.before(:each) do
-   DatabaseCleaner.start
+    DatabaseCleaner.start
   end
+
   config.after(:each) do
-   DatabaseCleaner.clean
+    DatabaseCleaner.clean
   end
   config.include Devise::TestHelpers, :type => :controller
   config.infer_spec_type_from_file_location!

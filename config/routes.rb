@@ -14,7 +14,7 @@ Rails.application.routes.draw do
 
   resources :switches
   
-  scope ':ip' , param: :ip, constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ } do
+  scope ':ip' , constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ } do
     resources :ports, only: [:index] do
       post 'update_ports', on: :collection
     end
