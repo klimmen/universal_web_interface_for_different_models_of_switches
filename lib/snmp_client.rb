@@ -9,6 +9,10 @@ module SnmpClient
         get_value = vb.value
       end
     end
+    p "111111111"
+    p oid
+    p get_value
+    p"2222222222"
     get_value
   end
 

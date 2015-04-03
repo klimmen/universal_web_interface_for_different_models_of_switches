@@ -1,6 +1,13 @@
 class Zyxel
 include TelnetClient
-include SnmpClient
+
+#if Rails.env.test?
+ # include TestTelnetClient
+  include TestSnmpClient
+#else
+#  include TelnetClient
+#  include SnmpClient
+#end
 
 	def initialize(host, snmp, model = nil, firmware = nil, login = nil, pass = nil)
 		@host = host
@@ -122,22 +129,22 @@ include SnmpClient
       when "up" then num = 1
       when "down" then num = 2    
     end 
-    Mib.snmp_set_integer("#{oid_admin_status}.#{port_num}", num, @host, @snmp)  
+    snmp_set_integer("#{oid_admin_status}.#{port_num}", num, @host, @snmp)
   end
 
   def set_port_name(port_num, value)
     oid_port_name= get_oid("setPortName")
-    Mib.snmp_set_string("#{oid_port_name}.#{port_num}", value, @host, @snmp)
+    snmp_set_string("#{oid_port_name}.#{port_num}", value, @host, @snmp)
   end
 
   def set_port_speed_duplex(port_num, value)
     oid_port_speed_duplex= get_oid("setPortSpeedDuplex")
-    Mib.snmp_set_integer("#{oid_port_speed_duplex}.#{port_num}", value, @host, @snmp)
+    snmp_set_integer("#{oid_port_speed_duplex}.#{port_num}", value, @host, @snmp)
   end
 ################ pvid
   def set_port_pvid(port, value)
     oid_port_pvid= get_oid("setPVID")
-    Mib.snmp_set_integer("#{oid_port_pvid}.#{port}", value, @host, @snmp)
+    snmp_set_integer("#{oid_port_pvid}.#{port}", value, @host, @snmp)
   end
 
 ################################ get_vlans

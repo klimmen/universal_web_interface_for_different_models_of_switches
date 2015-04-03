@@ -1,6 +1,11 @@
 class Zte
-  include TelnetClient
-  include SnmpClient
+  if Rails.env.test?
+    include TestTelnetClient
+    include TestSnmpClient
+  else
+    include TelnetClient
+    include SnmpClient
+  end
 
 	def initialize(host, snmp, model = nil, firmware = nil, login = nil, pass = nil)
 		@host = host
