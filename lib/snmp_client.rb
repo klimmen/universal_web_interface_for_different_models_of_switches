@@ -23,6 +23,10 @@ module SnmpClient
         walk_values<<vb.value.to_s
       end
     end
+    p "444444444444"
+    p oid
+    p walk_values
+    p"555555555555"
     walk_values
   end
 
@@ -48,6 +52,10 @@ module SnmpClient
         result[:value]<<vb.value.to_s
       end
     end
+    p "666666666666"
+    p oid
+    p result
+    p"77777777777"
     result
   end
 
