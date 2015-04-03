@@ -1,5 +1,5 @@
 class Comutator
-  include TestSnmpClient
+  include SnmpClient
   require 'json'
   def initialize(switch, user)
 	 @switch_name = switch.name
