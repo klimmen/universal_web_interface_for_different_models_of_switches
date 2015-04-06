@@ -1,13 +1,12 @@
 class Zyxel
-include TelnetClient
 
-#if Rails.env.test?
- # include TestTelnetClient
-  include TestSnmpClient
-#else
-#  include TelnetClient
-#  include SnmpClient
-#end
+if Rails.env.test?
+  include TestTelnetClient
+  include TestZyxelSnmpClient
+else
+  include TelnetClient
+  include SnmpClient
+end
 
 	def initialize(host, snmp, model = nil, firmware = nil, login = nil, pass = nil)
 		@host = host
@@ -313,9 +312,7 @@ include TelnetClient
     commands
   end
 
- 
 
- ################################ set_vlan
 
 end
 

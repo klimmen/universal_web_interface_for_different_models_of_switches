@@ -10,7 +10,7 @@ module TelnetClient
     localhost.cmd(login) { |c| print c }
     localhost.cmd(pass) { |c| print c }
     cmd_commands.each do |command|
-  		localhost.cmd(command) { |c| print c; log << c }
+  		localhost.cmd(command) { |c| print c; log << c.encode( 'ASCII-8BIT', 'UTF-8' ) }
   	end
   	localhost.close
     log

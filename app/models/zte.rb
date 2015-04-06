@@ -1,7 +1,7 @@
 class Zte
   if Rails.env.test?
     include TestTelnetClient
-    include TestSnmpClient
+    include TestZteSnmpClient
   else
     include TelnetClient
     include SnmpClient
