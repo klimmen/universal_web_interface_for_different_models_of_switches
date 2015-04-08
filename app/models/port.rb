@@ -23,7 +23,7 @@ class Port
  		result_ports[:port_speed_duplex]=switch_class.get_port_speed_duplex
  		result_ports[:port_select_options_speed_duplex] = switch_class.get_view_port_types(result_ports[:port_type])
     result_ports[:port_pvid]=switch_class.get_pvid
- 		File.open("public/#{@user}_file_ports_info.json", 'w'){ |file| file.write  result_ports.to_json }
+ 		File.open("tmp/cache/#{@user}_file_ports_info.json", 'w'){ |file| file.write  result_ports.to_json }
   	result_ports
   end
 
@@ -39,10 +39,10 @@ class Port
   		port_speed_duplex << value["port_speed_duplex"]
       port_pvid << value["port_pvid"]
  		end
-  	file = File.read("public/#{@user}_file_ports_info.json")
+  	file = File.read("tmp/cache/#{@user}_file_ports_info.json")
     ports_info_from_file = JSON.parse(file, {:symbolize_names => true})
     
-    file = File.read("public/#{@user}_file_switch_info.json")
+    file = File.read("tmp/cache/#{@user}_file_switch_info.json")
     switch_info = JSON.parse(file, {:symbolize_names => true})
 
     if switch_info[:model].slice(/ZTE/)

@@ -36,7 +36,7 @@ class Vlan
     result_vlans[:vlan_port_forbidden]<<output_format_ports(switch_class.vlan_port_forbidden(vid))
     result_vlans[:vlan_activate] << switch_class.get_vlan_activate(vid)
     end
-    File.open("public/#{@user}_file_vlans_info.json", 'w'){ |file| file.write result_vlans.to_json }
+    File.open("tmp/cache/#{@user}_file_vlans_info.json", 'w'){ |file| file.write result_vlans.to_json }
     result_vlans
   end
 
@@ -65,7 +65,7 @@ class Vlan
     result_vlans[:untag] = switch_class.get_port_untag(vid)
     result_vlans[:forbidden] = switch_class.vlan_port_forbidden(vid)
     result_vlans[:activate] = switch_class.get_vlan_activate(vid)
-    File.open("public/#{@user}_file_vlan_info.json", 'w'){ |file| file.write  result_vlans.to_json }
+    File.open("tmp/cache/#{@user}_file_vlan_info.json", 'w'){ |file| file.write  result_vlans.to_json }
 
     result_vlans
   end
@@ -82,7 +82,7 @@ class Vlan
     commands = switch_class.commands_for_create_update_vlan(param_vlan)
     new_connection(@host, @login, @pass, commands)
     
-    file = File.read("public/#{@user}_file_vlan_info.json")
+    file = File.read("tmp/cache/#{@user}_file_vlan_info.json")
     pvid_info_from_file = JSON.parse(file, {:symbolize_names => true})
 
     port_pvids.each_index do |i|
@@ -94,7 +94,7 @@ class Vlan
 
   def destroy(id)
     switch_class = check_model
-    file = File.read("public/#{@user}_file_vlans_info.json")
+    file = File.read("tmp/cache/#{@user}_file_vlans_info.json")
     vlans_info = JSON.parse(file, {:symbolize_names => true})
     commands = switch_class.commands_for_destroy_vlan(id, vlans_info)
     new_connection(@host,@login, @pass, commands)

@@ -23,6 +23,6 @@ class MacTablesController < ApplicationController
 
     def snmp_timeout
       flash[:danger] = "Switch is not available"
-      redirect_to switches_url
+      redirect_to ip_url
     end
 end

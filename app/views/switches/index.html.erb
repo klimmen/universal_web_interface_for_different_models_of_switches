@@ -2,27 +2,25 @@
 <%if !flash[:danger].nil? %>
     <p class="alert alert-danger"><%= flash[:danger] %></p>
 <%end%>
+
+
 <h1>Listing Switches</h1>
 
+<div id="serch_to_right"  >
+  <%= form_tag switches_path, :method => 'get' do %>
+      <%= text_field_tag :search, params[:search] %>
+      <%= submit_tag "Search", :name => nil, class: "btn-sm btn-success" %>
+  <% end %>
+</div>
+
 <table class="table table-bordered table-striped">
-  <thead>
-    <tr >
-      <th>Name</th>
-      <th>Ip</th>
-      <th>information switsh</th>
-      <th>Ports</th>
-      <th>Vlans</th>
-      <th>MAC Table</th>
-      <th>tools</th>
-    </tr>
-  </thead>
 
   <tbody>
     <% @subjects.each do |switch| %>
       <tr >
         <td class="col-md-2"><%= switch.name %></td>
         <td class="col-md-2"><%= switch.ip %></td>
-        <td class="col-md-2"><%= link_to 'information switsh', ip_path(switch.ip), class: "btn-sm btn-primary " %></td>
+        <td class="col-md-2"><%= link_to 'Switch info', ip_path(switch.ip), class: "btn-sm btn-primary " %></td>
         <td class="col-md-1"><%= link_to 'Ports', ports_path(switch.ip), class: "btn-sm btn-primary go_spiner " %></td>
         <td class="col-md-1"><%= link_to 'Vlans', vlans_path(switch.ip), class: "btn-sm btn-primary go_spiner" %></td>
         <td class="col-md-1"><%= link_to 'MAC Table', mac_tables_path(switch.ip), class: "btn-sm btn-primary go_spiner" %></td>
@@ -34,6 +32,10 @@
   </tbody>
 </table>
 
-<br>
+
 
 <%= link_to 'New Switch', new_switch_path, class: "btn btn-primary" %>
+
+<br>
+
+<%= will_paginate @subjects, :renderer => BootstrapPagination::Rails %>

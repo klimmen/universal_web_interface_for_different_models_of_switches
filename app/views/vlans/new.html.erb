@@ -1,11 +1,11 @@
-<h3> New vlan </h3>
+<h3> Add new vlan </h3>
 <%= form_for :new_vlan, url: vlans_path(@subject.ip) do |f| %>
   <p> 
   	<%= f.label "Active" %>
   	<%= f.check_box :active,{:checked => true}, true, nil%> 
   </p>
   <p>
-   	<%= f.label "VID: " %>
+   	<%= f.label "Vlan ID: " %>
     <%= f.text_field :vid, id: "vid"%>
   </p>
   <p>
@@ -59,5 +59,6 @@
   	</tbody>
   </table> 
   <%= f.submit 'Save', :class => 'btn btn-primary go_spiner'%>
+    <%= link_to 'Back', ip_path, :class =>"btn btn-primary" %>
 
 <% end %>

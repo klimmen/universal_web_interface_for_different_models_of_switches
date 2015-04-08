@@ -7,6 +7,19 @@ class Switch < ActiveRecord::Base
   validates :login, :presence => true
   validates :pass, :presence => true
   validates :snmp, :presence => true
- 
+
+
+  def self.search(search)
+
+    if search =~ /^\d+\.\d+/
+      where('ip LIKE ?', "%#{search}%")
+    elsif  search
+      where('name LIKE ?', "%#{search}%")
+     else
+      all
+    end
+  end
+
+
 
 end

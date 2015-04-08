@@ -6,10 +6,10 @@ CURRENT_CLASS = Switch
   load_and_authorize_resource
 
   before_filter(only: [:show, :edit, :update, :destroy]) {set_curent_class(CURRENT_CLASS)}
-  before_action :set_switch_info, only: [:information_about_switch, :ports, :vlans, :update_ports]
+  before_action :set_switch_info, only: [:information_about_switch, :update_ports]
   # GET /switches
   def index
-    @subjects = Switch.all
+    @subjects = Switch.search(params[:search]).paginate(:page => params[:page], :per_page => 15)
   end
 
   # GET /switches/1

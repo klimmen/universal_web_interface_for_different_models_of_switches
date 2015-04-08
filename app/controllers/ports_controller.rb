@@ -5,13 +5,8 @@ class PortsController < ApplicationController
 	before_action :set_switch_info, only: [ :index, :update_ports]
   
   def index
-    begin
       @data = @comutator.check_switch_info
       @ports = @port.ports(@data)
-    rescue SNMP::RequestTimeout
-      flash[:danger] = "Switch is not available"
-      redirect_to switches_url
-    end
   end
 
   def update_ports
@@ -29,7 +24,7 @@ class PortsController < ApplicationController
 
     def snmp_timeout
       flash[:danger] = "Switch is not available"
-      redirect_to switches_url
+      redirect_to ip_url
     end
 end
 

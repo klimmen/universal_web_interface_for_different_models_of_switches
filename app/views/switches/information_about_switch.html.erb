@@ -1,10 +1,33 @@
-<strong>name - </strong><strong id="switch_name"><%= @data[:name] %></strong>
-<strong>, ip - </strong><strong id="switch_ip"><%= @data[:ip] %></strong>
-<strong>, model - </strong><strong id="switch_model"><%=@data[:model]%></strong> 
-<strong>, firmware - </strong><strong id="switch_firmware"><%=@data[:firmware]%></strong>
-<strong>, mac - </strong><strong id="switch_mac"><%=@data[:mac]%></strong> 
-<div>
-<%= link_to 'Ports', ports_path(@subject.ip), class: "btn btn-primary " %>
-<%= link_to 'Vlans', vlans_path(@subject.ip), class: "btn btn-primary " %>
-<%= link_to 'MAC Table', mac_tables_path(@subject.ip), class: "btn btn-primary " %>
-</div>
+<p id="notice"><%= notice %></p>
+<%if !flash[:danger].nil? %>
+    <p class="alert alert-danger"><%= flash[:danger] %></p>
+<%end%>
+
+<table>
+
+  <tbody>
+    <tr>
+     <td >
+       <p><%= link_to 'Ports', ports_path(@subject.ip), class: "btn btn-primary go_spiner" %></p>
+       <p><%= link_to 'Vlans', vlans_path(@subject.ip), class: "btn btn-primary go_spiner" %></p>
+       <p><%= link_to 'MAC Table', mac_tables_path(@subject.ip), class: "btn btn-primary go_spiner" %></p>
+     </td>
+      <td class="center col-md-2">
+        <p><h4>Name:  </h4></p>
+        <p><h4>IP: </h4></p>
+        <p><h4>Model: </h4></p>
+        <p><h4>Firmware: </h4></p>
+        <p><h4>Mac: </h4></p>
+      </td>
+      <td class="center  col-md-6">
+        <p><h4 id="switch_name"><%= @data[:name] %></h4></p>
+        <p><h4 id="switch_ip"><%= @data[:ip] %></h4></p>
+        <p><h4 id="switch_model"><%=@data[:model]%></h4></p>
+        <p><h4 id="switch_firmware"><%=@data[:firmware]%></h4></p>
+        <p><h4 id="switch_mac"><%=@data[:mac]%></h4></p>
+      </td>
+    </tr>
+  </tbody>
+
+</table>
+<%= link_to 'Back', switches_path, :class =>"btn btn-primary" %>
