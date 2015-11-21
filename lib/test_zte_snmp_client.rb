@@ -2,12 +2,16 @@ module TestZteSnmpClient
 
   def snmp_get(oid, host, community)
     case oid
+      when '1.3.6.1.2.1.1.1.0' then return "ZTE Ethernet Switch  ZXR10 2952-SI, Version: V2.0.12.T"
+      when '1.3.6.1.2.1.17.1.1.0'  then return "01:23:45:67:89:ab:cd:ef"
       when "1.3.6.1.2.1.2.1.0" then return "52"
       when "1.3.6.1.2.1.17.7.1.4.3.1.1.1" then return " NULL "
       when "1.3.6.1.4.1.3902.15.2.11.3.3.1.4.1" then return "00000000000000"
       when "1.3.6.1.2.1.17.7.1.4.2.1.5.1" then return "fffffffffffff000"
       when "1.3.6.1.4.1.3902.15.2.11.3.3.1.6.1" then return "1"
       when "1.3.6.1.2.1.17.7.1.4.3.1.1.22" then return "root_22"
+      when "1.3.6.1.2.1.17.7.1.4.3.1.1.1" then return "user_1"
+      when "1.3.6.1.2.1.17.7.1.4.3.1.1.998" then return "privat_998"
       when "1.3.6.1.4.1.3902.15.2.11.3.3.1.4.22" then return "000000000000f0"
       when "1.3.6.1.2.1.17.7.1.4.2.1.5.22" then return "0000000000000000"
       when "1.3.6.1.4.1.3902.15.2.11.3.3.1.6.22" then return "1"
@@ -17,6 +21,7 @@ module TestZteSnmpClient
   def snmp_walk(oid, host, community)
     case oid
       #walk ports
+      when '1.3.6.1.2.1.2.2.1.25' then return ["1", "2", "1", "1", "1", "1", "1", "54", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1"]
       when "1.3.6.1.2.1.2.2.1.7" then return ["1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1"]
       when "1.3.6.1.4.1.3902.15.2.11.2.4.1.3" then return ["GOOD", "kjgvjh", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free", "Free1", "", "", "", ""]
       when "1.3.6.1.2.1.2.2.1.8" then return ["2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "1", "1", "2", "2"]
@@ -29,6 +34,8 @@ module TestZteSnmpClient
 
   def snmp_set_integer(oid, value, host, community)
     case oid
+      when '8.1.3.6.1.2.1.2.2.1.7.1' then return value
+      when '8.1.3.6.1.2.1.2.2.1.7.1.2' then return value
       when "1.3.6.1.2.1.2.2.1.7.1" then return value
       when "1.3.6.1.4.1.3902.15.2.11.2.4.1.6.1" then return value
       when "1.3.6.1.4.1.3902.15.2.11.2.4.1.9.1" then return value
@@ -37,6 +44,7 @@ module TestZteSnmpClient
 
   def snmp_set_string(oid, value, host, community)
     case oid
+      when "8.1.3.6.1.4.1.3902.15.2.11.2.4.1.3.1" then return value
       when "1.3.6.1.4.1.3902.15.2.11.2.4.1.3.1" then return value
     end
   end

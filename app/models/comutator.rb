@@ -1,10 +1,11 @@
 class Comutator
 
-  if Rails.env.test?
-    include TestZyxelSnmpClient
-  else
-    include SnmpClient
-  end
+  #if Rails.env.test?
+    #include TestZyxelSnmpClient
+  include TestZteSnmpClient
+  #else
+  #  include SnmpClient
+  #end
 
   require 'json'
   def initialize(switch, user)

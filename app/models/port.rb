@@ -13,7 +13,7 @@ class Port
   	if data[:model].slice(/ZTE/)
   		switch_class = Zte.new(@host, @snmp, data[:model], data[:firmware])
   	elsif data[:model].slice(/(ES|MES)/)
-  		switch_class = Zyxel.new(@host, @snmp, data[:model], data[:firmware])  		
+  		switch_class = Zyxel.new(@host, @snmp, data[:model], data[:firmware])
   	end
   	result_ports[:ports_count]=switch_class.get_ports_count
  		result_ports[:port_admin_status]=switch_class.get_port_admin_status
