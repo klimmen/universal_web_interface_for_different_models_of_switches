@@ -1,11 +1,11 @@
 class Zte
-  if Rails.env.test?
+  #if Rails.env.test?
     include TestTelnetClient
     include TestZteSnmpClient
-  else
-    include TelnetClient
-    include SnmpClient
-  end
+  #else
+  #  include TelnetClient
+  #  include SnmpClient
+  #end
 
 	def initialize(host, snmp, model = nil, firmware = nil, login = nil, pass = nil)
 		@host = host
@@ -28,6 +28,10 @@ class Zte
 
 	def get_oid(value_oid_name)
   	value_oid = ValueOid.find_by_name(value_oid_name)
+    p 111111111111111
+    p value_oid_name
+    p ValueOid.find_by_name(value_oid_name)
+    p 222222222222222222
 		oid = SwitchModel.find_by_name(@model).firmwares.find_by_name(@firmware).mibs.find_by_value_oid_id(value_oid.id).name
   end
 

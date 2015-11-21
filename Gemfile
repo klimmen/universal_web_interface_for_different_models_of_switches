@@ -64,3 +64,4 @@ end
 gem 'bootstrap-sass'
 gem 'bootstrap-select-rails'
 gem 'snmp'
+gem 'ngrok'
