@@ -25,18 +25,14 @@ class Zte
 
 	def get_oid(value_oid_name)
   	value_oid = ValueOid.find_by_name(value_oid_name)
-    p 111111111111111
-    p value_oid_name
-    p ValueOid.find_by_name(value_oid_name)
-    p 222222222222222222
-		oid = SwitchModel.find_by_name(@model).firmwares.find_by_name(@firmware).mibs.find_by_value_oid_id(value_oid.id).name
+		SwitchModel.find_by_name(@model).firmwares.find_by_name(@firmware).mibs.find_by_value_oid_id(value_oid.id).name
   end
 
  ################################ get_ports
 	
 	def get_ports_count
     oid_ports_count =  get_oid("getPortsCount")
-    ports_count = snmp_get(oid_ports_count, @host, @snmp).to_i
+    snmp_get(oid_ports_count, @host, @snmp).to_i
   end
 
   def get_port_admin_status
@@ -69,7 +65,7 @@ class Zte
   
   def get_port_speed_duplex
   	oid_speed_duplex= get_oid("walkPortSpeedDuplex")
-  	speed_duplex =snmp_walk(oid_speed_duplex, @host, @snmp)
+  	snmp_walk(oid_speed_duplex, @host, @snmp)
   end
 
   def get_link_state
@@ -98,7 +94,7 @@ class Zte
 
   def get_pvid
     oid_names = get_oid("walkPVID")
-    names = snmp_walk(oid_names, @host, @snmp)
+    snmp_walk(oid_names, @host, @snmp)
   end
 
  ################################ set_ports
@@ -122,20 +118,23 @@ class Zte
     snmp_set_integer("#{oid_port_speed_duplex}.#{port_num}", value, @host, @snmp)
   end
 
-  def set_port_pvid(pvid, value)
+  def set_port_pvid(port_num, value)
+    p 44444444444
+    p port_num
+    p value
     oid_port_pvid= get_oid("setPVID")
-    snmp_set_integer("#{oid_port_pvid}.#{pvid}", value, @host, @snmp)
+    snmp_set_integer("#{oid_port_pvid}.#{port_num}", value, @host, @snmp)
   end
 
  ################################ get_vlans
   def get_vid
     oid_vid = get_oid("walkVlanID")
-    vlan_vid = snmp_walk(oid_vid, @host, @snmp)
+    snmp_walk(oid_vid, @host, @snmp)
   end
 
   def get_vlan_name(vid)
     oid_vlan_name = get_oid("getVlanName")
-    vlan_name = snmp_get("#{oid_vlan_name}.#{vid}", @host, @snmp).to_s
+    snmp_get("#{oid_vlan_name}.#{vid}", @host, @snmp).to_s
   end
 
   def get_port_tag(vid)
@@ -275,7 +274,6 @@ class Zte
   end
 
   def commands_for_destroy_vlan(id, vlans_info)
-        p vlans_info
     commands  = ["en", @pass, "clear vlan #{id} name"]
     vlans_info[:vlan_vid].each_index do |i|
       if vlans_info[:vlan_vid][i] == id
@@ -285,7 +283,6 @@ class Zte
         commands << "set vlan #{id} permit port #{vlans_info[:vlan_port_untag][i]}" if !vlans_info[:vlan_port_forbidden][i].nil?
       end
     end
-    p commands
     commands
   end
 
