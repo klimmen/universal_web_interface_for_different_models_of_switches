@@ -1,12 +1,12 @@
 class Zyxel
 
-if Rails.env.test?
+
   include TestTelnetClient
-  include TestZyxelSnmpClient
-else
-  include TelnetClient
-  include SnmpClient
-end
+  include TestSnmpClient
+
+#   include TelnetClient
+#   include SnmpClient
+
 
 	def initialize(host, snmp, model = nil, firmware = nil, login = nil, pass = nil)
 		@host = host

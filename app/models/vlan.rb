@@ -1,12 +1,9 @@
 class Vlan
 
   require 'json'
-  if Rails.env.test?
     include TestTelnetClient
-  else
-    include TelnetClient
-  end
-	
+  #  include TelnetClient
+
   def initialize(switch, user, data)
 		@host = switch.ip
 		@snmp = switch.snmp

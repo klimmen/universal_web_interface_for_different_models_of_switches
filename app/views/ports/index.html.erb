@@ -3,7 +3,6 @@
 <strong>, Model - </strong><strong id="switch_model"><%=@data[:model]%></strong>
 <strong>, Firmware - </strong><strong id="switch_firmware"><%=@data[:firmware]%></strong>
 <strong>, Mac - </strong><strong id="switch_mac"><%=@data[:mac]%></strong>
-
 <%= form_for :ports, url: update_ports_ports_path(@subject.ip) do |f|  %>
 	<table class="table table-bordered table-striped">
   	<thead>
@@ -27,7 +26,7 @@
 						<td ><%= port.label @ports[:port_link_state][i] %></td>
 						<td ><%= port.label @ports[:port_type][i] %>M</td>
 						<td ><%= port.select :port_speed_duplex, options_for_select(@ports[:port_select_options_speed_duplex][i], @ports[:port_speed_duplex][i]) %></td>
-						<td ><%= port.text_field :port_pvid, :value => @ports[:port_pvid][i] %></td>
+						<td ><%= port.number_field :port_pvid, :value => @ports[:port_pvid][i] %></td>
 				<%end%>
 			<%end%>	
 		</tbody>

@@ -1,4 +1,4 @@
-module TestZyxelSnmpClient
+class TestZyxelSnmpClient
 
   def snmp_get(oid, host, community)
     case oid

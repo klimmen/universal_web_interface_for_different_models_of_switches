@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     end
   end
 
+
   resources :switches
   
   scope ':ip' , constraints: { ip: /((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)/ } do
