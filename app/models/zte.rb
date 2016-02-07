@@ -119,9 +119,6 @@ class Zte
   end
 
   def set_port_pvid(port_num, value)
-    p 44444444444
-    p port_num
-    p value
     oid_port_pvid= get_oid("setPVID")
     snmp_set_integer("#{oid_port_pvid}.#{port_num}", value, @host, @snmp)
   end
@@ -187,28 +184,28 @@ class Zte
     ports = []
     result.each_index do |i|
       result[i].map! do |port|
-        case port 
+        case port
           when 8 then port = 1
           when 4 then port = 2
           when 2 then port = 3
           when 1 then port = 4
         end
         ports << i * 4 + port
-      end 
+      end
     end
     ports
   end
 
 
   def input_format_ports (ports_string)
-    ports_arrey =  ports_string.split(",")
+    ports_array =  ports_string.split(",")
     ports = []
-    ports_arrey.each do |port_arrey|
-      if !port_arrey.slice("-").nil?
-        block_ports  = port_arrey.scan(/\d+/)
+    ports_array.each do |port_array| #this is magic code
+      if !port_array.slice("-").nil?
+        block_ports  = port_array.scan(/\d+/)
         (block_ports[0]..block_ports[1]).each { |ii| ports << ii.to_i}
       else
-        ports << port_arrey.to_i
+        ports << port_array.to_i
       end
     end
     ports
