@@ -9,9 +9,9 @@
 
 
 $(document).on("page:change",function(){
-  $('.go_spiner').click(function(){
-    displayDate()
-  })   
+  //$('.go_spiner').click(function(){
+  //  displayDate()
+  //})
 
   $("input[name='all_ports']").click(function(){
     GetSelectedItem()
@@ -31,7 +31,7 @@ $(document).on("page:change",function(){
 
 })
 
-function displayDate(){    
+function displayDate(){
   var opts = {
     lines: 13, // The number of lines to draw
     length: 12, // The length of each line

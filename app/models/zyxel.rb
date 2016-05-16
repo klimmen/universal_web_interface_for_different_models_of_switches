@@ -42,6 +42,10 @@ class Zyxel
   
   def get_oid(value_oid_name)
   	value_oid = ValueOid.find_by_name(value_oid_name)
+    p 11111111111
+    p value_oid_name
+    p 2222222222222222222222
+    p value_oid.id
 		oid = SwitchModel.find_by_name(@model).firmwares.find_by_name(@firmware).mibs.find_by_value_oid_id(value_oid.id).name
   end
 	

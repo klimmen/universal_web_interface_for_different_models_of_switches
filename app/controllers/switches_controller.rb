@@ -9,7 +9,7 @@ CURRENT_CLASS = Switch
   before_action :set_switch_info, only: [:information_about_switch, :update_ports]
   # GET /switches
   def index
-    @subjects = Switch.search(params[:search]).paginate(:page => params[:page], :per_page => 15)
+    @subjects = Switch.search(params[:search]).paginate(:page => params[:page], :per_page => 2)
   end
 
   # GET /switches/1

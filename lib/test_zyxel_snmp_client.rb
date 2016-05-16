@@ -19,11 +19,13 @@ class TestZyxelSnmpClient
       when "1.3.6.1.2.1.17.7.1.4.3.1.4.1" then return "\xFF\xFF\xFF\xF0\x00\x00\x00\x00"
       when "1.3.6.1.2.1.17.7.1.4.2.1.4.0.1" then return "\xFF\xFF\xFF\xF0\x00\x00\x00\x00"
       when "1.3.6.1.2.1.17.7.1.4.3.1.3.1" then return "\x00\x00\x00\x00\x00\x00\x00\x00"
+      when "1.3.6.1.2.1.17.7.1.4.3.1.7.1" then return "\x00\x00\x00\x00\x00\x00\x00\x00"
       when ".3.6.1.2.1.17.7.1.4.3.1.5.1" then return "1"
       when "1.3.6.1.2.1.17.7.1.4.3.1.1.22" then return "root_vlan"
       when "1.3.6.1.2.1.17.7.1.4.3.1.4.22" then return "\xFF\xFF\xFF\x00\x00\x00\x00\x00"
       when "1.3.6.1.2.1.17.7.1.4.2.1.4.0.22" then return "\x00\x00\x00\xF0\x00\x00\x00\x00"
       when "1.3.6.1.2.1.17.7.1.4.3.1.3.22" then return "\xFF\xFF\xFF\x00\x00\x00\x00\x00"
+      when "1.3.6.1.2.1.17.7.1.4.3.1.7.22" then return "\xFF\xFF\xFF\x00\x00\x00\x00\x00"
       when "1.3.6.1.2.1.17.7.1.4.3.1.5.22" then return "1"
     end
   end
